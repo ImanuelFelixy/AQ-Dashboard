@@ -23,12 +23,272 @@ if ($userIp === '::1') {
 $totalPO = 25;
 $totalPONominal = 9999999;
 
-// 2. Outstanding PO
-$outstandingPO = 10;
-$outstandingPONominal = 9999999;
+// 2. Data Dummy Outstanding PO (5 Data)
+$outstandingList = [
+    [
+        'no_po'         => 'PO-2026/09/001',
+        'tgl_trans'     => '01/09/2026',
+        'tgl_kirim'     => '05/09/2026',
+        'nama_supplier' => 'PT Asahimas Flat Glass Tbk',
+        'status'        => 'Dikirim Sebagian',
+        'keterangan'    => 'Pengiriman tahap 1 via truk wingbox, sisa kaca tempered menunggu jadwal tempering batch 2.',
+        'jumlah'        => 1150000,
+        'items'         => [
+            [
+                'nama_barang' => 'Kaca Tempered 10mm Clear',
+                'satuan'      => 'Lembar',
+                'qty'         => 12,
+                'qty_kirim'   => 8,
+                'sisa_qty'    => 4,
+                'subtotal'    => 540000,
+                'keterangan'  => 'Ukuran custom 1200 x 2400 mm'
+            ],
+            [
+                'nama_barang' => 'Kaca Float Bening 5mm Standard',
+                'satuan'      => 'Lembar',
+                'qty'         => 25,
+                'qty_kirim'   => 25,
+                'sisa_qty'    => 0,
+                'subtotal'    => 380000,
+                'keterangan'  => 'Lembaran standar gudang utama'
+            ],
+            [
+                'nama_barang' => 'Kaca Tinted Panasap Dark Grey 6mm',
+                'satuan'      => 'Lembar',
+                'qty'         => 10,
+                'qty_kirim'   => 5,
+                'sisa_qty'    => 5,
+                'subtotal'    => 230000,
+                'keterangan'  => 'Batch khusus warna dark grey'
+            ]
+        ]
+    ],
+    [
+        'no_po'         => 'PO-2026/09/002',
+        'tgl_trans'     => '02/09/2026',
+        'tgl_kirim'     => '06/09/2026',
+        'nama_supplier' => 'PT Dowsil Silicon Prima',
+        'status'        => 'Belum Dikirim',
+        'keterangan'    => 'Menunggu konfirmasi jadwal dispatch ekspedisi dari pabrik Cikarang.',
+        'jumlah'        => 850000,
+        'items'         => [
+            [
+                'nama_barang' => 'Lem Sealant Silikon Transparan 300ml',
+                'satuan'      => 'Tabung',
+                'qty'         => 50,
+                'qty_kirim'   => 0,
+                'sisa_qty'    => 50,
+                'subtotal'    => 450000,
+                'keterangan'  => 'Grade struktural kedap air'
+            ],
+            [
+                'nama_barang' => 'Sealant Acetic Cure Black 300ml',
+                'satuan'      => 'Tabung',
+                'qty'         => 30,
+                'qty_kirim'   => 0,
+                'sisa_qty'    => 30,
+                'subtotal'    => 270000,
+                'keterangan'  => 'Formula cepat kering hitam'
+            ],
+            [
+                'nama_barang' => 'Nozzle Applicator Lem Kaca',
+                'satuan'      => 'Pack',
+                'qty'         => 10,
+                'qty_kirim'   => 0,
+                'sisa_qty'    => 10,
+                'subtotal'    => 130000,
+                'keterangan'  => '1 pack isi 20 unit corong'
+            ]
+        ]
+    ],
+    [
+        'no_po'         => 'PO-2026/09/003',
+        'tgl_trans'     => '03/09/2026',
+        'tgl_kirim'     => '08/09/2026',
+        'nama_supplier' => 'CV Aluminium Prima Jaya',
+        'status'        => 'Dikirim Sebagian',
+        'keterangan'    => 'Kusen U-Channel sudah sampai di workshop, karet gasket masih proses packing.',
+        'jumlah'        => 920000,
+        'items'         => [
+            [
+                'nama_barang' => 'Profil Aluminium U-Channel 12mm',
+                'satuan'      => 'Batang',
+                'qty'         => 40,
+                'qty_kirim'   => 25,
+                'sisa_qty'    => 15,
+                'subtotal'    => 620000,
+                'keterangan'  => 'Panjang 6 meter silver anodize'
+            ],
+            [
+                'nama_barang' => 'Karet Gasket EPDM Kaca 10-12mm',
+                'satuan'      => 'Roll',
+                'qty'         => 15,
+                'qty_kirim'   => 0,
+                'sisa_qty'    => 15,
+                'subtotal'    => 300000,
+                'keterangan'  => 'Roll 50 meter hitam elastis'
+            ]
+        ]
+    ],
+    [
+        'no_po'         => 'PO-2026/09/004',
+        'tgl_trans'     => '04/09/2026',
+        'tgl_kirim'     => '10/09/2026',
+        'nama_supplier' => 'PT Sealant Mandiri Nusantara',
+        'status'        => 'Belum Dikirim',
+        'keterangan'    => 'PO disetujui, sedang menunggu penerbitan Surat Jalan resmi dan invoice proforma.',
+        'jumlah'        => 675000,
+        'items'         => [
+            [
+                'nama_barang' => 'Primer Kaca Kerapatan Tinggi 250ml',
+                'satuan'      => 'Kaleng',
+                'qty'         => 8,
+                'qty_kirim'   => 0,
+                'sisa_qty'    => 8,
+                'subtotal'    => 360000,
+                'keterangan'  => 'Cairan perekat kaca ke rangka'
+            ],
+            [
+                'nama_barang' => 'Tape Spacer Struktural 6mm x 6mm',
+                'satuan'      => 'Roll',
+                'qty'         => 12,
+                'qty_kirim'   => 0,
+                'sisa_qty'    => 12,
+                'subtotal'    => 315000,
+                'keterangan'  => 'Double tape foam isolasi'
+            ]
+        ]
+    ],
+    [
+        'no_po'         => 'PO-2026/09/005',
+        'tgl_trans'     => '05/09/2026',
+        'tgl_kirim'     => '11/09/2026',
+        'nama_supplier' => 'PT Mulia Glasswork Sentosa',
+        'status'        => 'Dikirim Sebagian',
+        'keterangan'    => 'Kaca cermin tiba dengan kondisi aman tanpa retak, kaca laminated dalam proses kirim.',
+        'jumlah'        => 780000,
+        'items'         => [
+            [
+                'nama_barang' => 'Kaca Cermin Bevel Tebal 5mm',
+                'satuan'      => 'Lembar',
+                'qty'         => 20,
+                'qty_kirim'   => 20,
+                'sisa_qty'    => 0,
+                'subtotal'    => 460000,
+                'keterangan'  => 'Bevel 2cm keliling tepian'
+            ],
+            [
+                'nama_barang' => 'Kaca Laminated Safety 5mm + 5mm',
+                'satuan'      => 'Lembar',
+                'qty'         => 8,
+                'qty_kirim'   => 3,
+                'sisa_qty'    => 5,
+                'subtotal'    => 320000,
+                'keterangan'  => 'Interlayer PVB 0.76mm clear'
+            ]
+        ]
+    ]
+];
 
-// 3. Pembelian Belum Dilunasi
-$unpaidNominal = 9999999;
+$outstandingPO = count($outstandingList);
+$outstandingPONominal = array_sum(array_column($outstandingList, 'jumlah'));
+
+// 3. Data Dummy Pembelian Belum Dilunasi (10 Data)
+$unpaidList = [
+    [
+        'supplier'      => 'PT Asahimas Flat Glass Tbk',
+        'no_nb'         => 'NB-2026/09/001',
+        'no_pelunasan'  => 'PL-2026/09/001',
+        'tgl_pembelian' => '01/09/2026',
+        'tgl_tempo'     => '05/09/2026',
+        'nominal'       => 1850000,
+        'kurang_bayar'  => 850000,
+    ],
+    [
+        'supplier'      => 'PT Dowsil Silicon Prima',
+        'no_nb'         => 'NB-2026/09/002',
+        'no_pelunasan'  => 'PL-2026/09/002',
+        'tgl_pembelian' => '02/09/2026',
+        'tgl_tempo'     => '06/09/2026',
+        'nominal'       => 1200000,
+        'kurang_bayar'  => 600000,
+    ],
+    [
+        'supplier'      => 'CV Sinar Kaca Abadi',
+        'no_nb'         => 'NB-2026/09/003',
+        'no_pelunasan'  => 'PL-2026/09/003',
+        'tgl_pembelian' => '03/09/2026',
+        'tgl_tempo'     => '07/09/2026',
+        'nominal'       => 950000,
+        'kurang_bayar'  => 450000,
+    ],
+    [
+        'supplier'      => 'PT Mulia Glasswork Sentosa',
+        'no_nb'         => 'NB-2026/09/004',
+        'no_pelunasan'  => 'PL-2026/09/004',
+        'tgl_pembelian' => '04/09/2026',
+        'tgl_tempo'     => '08/09/2026',
+        'nominal'       => 1450000,
+        'kurang_bayar'  => 725000,
+    ],
+    [
+        'supplier'      => 'PT Sealant Mandiri Nusantara',
+        'no_nb'         => 'NB-2026/09/005',
+        'no_pelunasan'  => 'PL-2026/09/005',
+        'tgl_pembelian' => '05/09/2026',
+        'tgl_tempo'     => '09/09/2026',
+        'nominal'       => 880000,
+        'kurang_bayar'  => 380000,
+        'status'        => 'Tempo Berjalan'
+    ],
+    [
+        'supplier'      => 'CV Aluminium Prima Jaya',
+        'no_nb'         => 'NB-2026/09/006',
+        'no_pelunasan'  => 'PL-2026/09/006',
+        'tgl_pembelian' => '06/09/2026',
+        'tgl_tempo'     => '10/09/2026',
+        'nominal'       => 670000,
+        'kurang_bayar'  => 370000,
+    ],
+    [
+        'supplier'      => 'PT Gasket Megah Teknik',
+        'no_nb'         => 'NB-2026/09/007',
+        'no_pelunasan'  => 'PL-2026/09/007',
+        'tgl_pembelian' => '07/09/2026',
+        'tgl_tempo'     => '11/09/2026',
+        'nominal'       => 520000,
+        'kurang_bayar'  => 220000,
+    ],
+    [
+        'supplier'      => 'CV Hardware Kaca Sukses',
+        'no_nb'         => 'NB-2026/09/008',
+        'no_pelunasan'  => 'PL-2026/09/008',
+        'tgl_pembelian' => '08/09/2026',
+        'tgl_tempo'     => '12/09/2026',
+        'nominal'       => 740000,
+        'kurang_bayar'  => 440000,
+    ],
+    [
+        'supplier'      => 'PT Mulia Glasswork Sentosa',
+        'no_nb'         => 'NB-2026/09/009',
+        'no_pelunasan'  => 'PL-2026/09/009',
+        'tgl_pembelian' => '09/09/2026',
+        'tgl_tempo'     => '13/09/2026',
+        'nominal'       => 1150000,
+        'kurang_bayar'  => 550000,
+    ],
+    [
+        'supplier'      => 'CV Aksesoris Kaca Nusantara',
+        'no_nb'         => 'NB-2026/09/010',
+        'no_pelunasan'  => 'PL-2026/09/010',
+        'tgl_pembelian' => '10/09/2026',
+        'tgl_tempo'     => '14/09/2026',
+        'nominal'       => 800000,
+        'kurang_bayar'  => 400000,
+    ]
+];
+
+$unpaidNominal = array_sum(array_column($unpaidList, 'kurang_bayar'));
 
 // 4. Pengajuan PO
 $submissionCount = 35;
@@ -995,6 +1255,1015 @@ $categoryData = [
         display: none !important;
     }
 }
+
+/* ==========================================
+   MODAL OUTSTANDING PO STYLES
+========================================== */
+
+.po-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: poFadeIn .2s ease-out;
+}
+
+.po-modal-overlay.active {
+    display: flex;
+}
+
+@keyframes poFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.po-modal-window {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 1300px;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+    overflow: hidden;
+    animation: poSlideUp .25s ease-out;
+}
+
+@keyframes poSlideUp {
+    from { transform: translateY(20px) scale(0.98); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Modal Header */
+.po-modal-header {
+    background: linear-gradient(135deg, #075db5 0%, #0866c6 100%);
+    color: #ffffff;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.po-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.po-header-icon {
+    width: 40px;
+    height: 40px;
+    background: #ffffff;
+    color: #0866c6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+
+.po-header-text h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.2;
+}
+
+.po-header-badge {
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.po-header-text p {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 3px 0 0;
+}
+
+.po-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.po-search-input-wrap {
+    position: relative;
+    width: 240px;
+}
+
+.po-search-input-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.po-search-input-wrap input {
+    width: 100%;
+    height: 38px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 12px 0 34px;
+    font-size: 12px;
+    color: #1e293b;
+    outline: none;
+    transition: box-shadow .2s;
+}
+
+.po-search-input-wrap input:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+.po-select-status {
+    height: 38px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    outline: none;
+    cursor: pointer;
+}
+
+.po-btn-export {
+    height: 38px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e293b;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color .2s;
+}
+
+.po-btn-export:hover {
+    background: #f1f5f9;
+}
+
+.po-btn-close-x {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color .2s;
+}
+
+.po-btn-close-x:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Modal Body Grid */
+.po-modal-body {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    flex: 1;
+    overflow: hidden;
+    min-height: 480px;
+    max-height: calc(92vh - 135px);
+}
+
+/* Left Panel: Table of POs */
+.po-panel-left {
+    overflow-y: auto;
+    border-right: 1px solid #e2e8f0;
+    background: #ffffff;
+}
+
+.po-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 12px;
+}
+
+.po-table thead th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.po-table tbody tr {
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+
+.po-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.po-table tbody tr.active-row {
+    background: #edf5ff;
+}
+
+.po-table tbody tr.active-row td:first-child {
+    border-left: 4px solid #0866c6;
+}
+
+.po-table tbody td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.po-row-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+.po-number-cell {
+    font-weight: 800;
+    color: #0866c6;
+    font-size: 12.5px;
+    line-height: 1.25;
+}
+
+.po-supplier-cell {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 3px;
+}
+
+.po-date-cell {
+    color: #475569;
+    font-weight: 600;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.po-nominal-cell {
+    font-weight: 800;
+    color: #0f172a;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+.po-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.po-status-badge.amber {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.po-status-badge.amber .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f59e0b;
+}
+
+.po-status-badge.blue {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.po-status-badge.blue .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0284c7;
+}
+
+.po-arrow-cell {
+    color: #cbd5e1;
+    font-size: 13px;
+    text-align: right;
+}
+
+.active-row .po-arrow-cell {
+    color: #0866c6;
+}
+
+/* Right Panel: Detail View */
+.po-panel-right {
+    overflow-y: auto;
+    padding: 22px 24px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+.po-detail-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.po-detail-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.po-badge-rincian {
+    background: #0866c6;
+    color: #ffffff;
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.po-detail-nopo {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.po-detail-supplier-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 4px 0 14px;
+}
+
+.po-detail-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.po-meta-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    padding: 10px 14px;
+}
+
+.po-meta-card span {
+    display: block;
+    font-size: 10.5px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.po-meta-card strong {
+    font-size: 13px;
+    color: #1e293b;
+    font-weight: 800;
+    margin-top: 2px;
+    display: block;
+}
+
+.po-keterangan-alert {
+    background: #f0f7ff;
+    border-left: 3px solid #0866c6;
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-size: 11px;
+    color: #334155;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.po-keterangan-alert strong {
+    color: #0866c6;
+}
+
+.po-items-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.po-items-title-bar h5 {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0;
+}
+
+.po-items-count-tag {
+    font-size: 11px;
+    font-weight: 800;
+    color: #0866c6;
+}
+
+.po-items-table-wrap {
+    flex: 1;
+    overflow-x: auto;
+}
+
+.po-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+}
+
+.po-items-table th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.po-items-table td {
+    padding: 10px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+.po-items-table td.qty-col {
+    text-align: center;
+    font-weight: 700;
+}
+
+.po-items-table td.subtotal-col {
+    text-align: right;
+    font-weight: 800;
+    color: #0f172a;
+    white-space: nowrap;
+}
+
+.po-item-note {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.po-detail-footer-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    padding: 12px 16px;
+    margin-top: 16px;
+}
+
+.po-detail-footer-summary span {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.po-detail-footer-summary strong {
+    font-size: 17px;
+    font-weight: 800;
+    color: #0866c6;
+}
+
+/* Modal Bottom Footer */
+.po-modal-bottom {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.po-bottom-info {
+    font-size: 11.5px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.po-bottom-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.po-page-btn {
+    padding: 6px 12px;
+    border: 1px solid #dce5f1;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.po-page-btn:hover:not(.disabled) {
+    background: #edf4ff;
+    color: #0866c6;
+}
+
+.po-page-btn.active {
+    background: #0866c6;
+    color: #ffffff;
+    border-color: #0866c6;
+}
+
+.po-page-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.po-btn-tutup {
+    padding: 6px 18px;
+    border: 1px solid #dce5f1;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.po-btn-tutup:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+/* Responsive Modal */
+@media (max-width: 992px) {
+    .po-modal-body {
+        grid-template-columns: 1fr;
+        max-height: 80vh;
+    }
+
+    .po-panel-left {
+        max-height: 300px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+}
+
+/* ==========================================
+   MODAL PEMBELIAN BELUM DILUNASI STYLES
+========================================== */
+
+.unpaid-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: poFadeIn .2s ease-out;
+}
+
+.unpaid-modal-overlay.active {
+    display: flex;
+}
+
+.unpaid-modal-window {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 1280px;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+    overflow: hidden;
+    animation: poSlideUp .25s ease-out;
+}
+
+.unpaid-modal-header {
+    background: linear-gradient(135deg, #075db5 0%, #0866c6 100%);
+    color: #ffffff;
+    padding: 20px 26px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.unpaid-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.unpaid-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.unpaid-header-icon {
+    width: 42px;
+    height: 42px;
+    background: #ffffff;
+    color: #0866c6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+
+.unpaid-header-title-wrap h3 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.25;
+}
+
+.unpaid-badge-count {
+    background: #ffffff;
+    color: #dc2626;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.unpaid-badge-count .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+}
+
+.unpaid-header-title-wrap p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 4px 0 0;
+}
+
+.unpaid-header-summary-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 8px 18px;
+    text-align: right;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+    flex-shrink: 0;
+}
+
+.unpaid-header-summary-card span {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    color: #64748b;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.unpaid-header-summary-card strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin-top: 2px;
+}
+
+.unpaid-header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.unpaid-controls-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    max-width: 600px;
+}
+
+.unpaid-search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+}
+
+.unpaid-search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.unpaid-search-wrap input {
+    width: 100%;
+    height: 38px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 12px 0 34px;
+    font-size: 12px;
+    color: #1e293b;
+    outline: none;
+    transition: box-shadow .2s;
+}
+
+.unpaid-search-wrap input:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+.unpaid-select-status {
+    height: 38px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    outline: none;
+    cursor: pointer;
+}
+
+.unpaid-controls-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.unpaid-btn-export {
+    height: 38px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e293b;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color .2s;
+}
+
+.unpaid-btn-export:hover {
+    background: #f1f5f9;
+}
+
+.unpaid-btn-close-x {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color .2s;
+}
+
+.unpaid-btn-close-x:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Modal Body Table */
+.unpaid-modal-body {
+    overflow-y: auto;
+    overflow-x: auto;
+    flex: 1;
+    background: #ffffff;
+    min-height: 380px;
+    max-height: calc(92vh - 190px);
+}
+
+.unpaid-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 12.5px;
+}
+
+.unpaid-table thead th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 13px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    z-index: 2;
+    white-space: nowrap;
+}
+
+.unpaid-table tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.unpaid-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.unpaid-row-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+.unpaid-nb-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 700;
+    font-size: 11.5px;
+    padding: 4px 9px;
+    border-radius: 6px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.unpaid-pelunasan-badge {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.unpaid-supplier-text {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.unpaid-date-text {
+    color: #475569;
+    font-weight: 600;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.unpaid-nominal-text {
+    font-weight: 800;
+    color: #1e293b;
+    white-space: nowrap;
+}
+
+.unpaid-kurang-bayar-text {
+    font-weight: 800;
+    color: #dc2626;
+    white-space: nowrap;
+}
+
+.unpaid-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.unpaid-status-badge.danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.unpaid-status-badge.danger .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+}
+
+.unpaid-status-badge.info {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.unpaid-status-badge.info .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0284c7;
+}
+
+/* Modal Bottom Footer */
+.unpaid-modal-bottom {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.unpaid-bottom-info {
+    font-size: 11.5px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.unpaid-bottom-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.unpaid-btn-tutup {
+    padding: 6px 18px;
+    border: 1px solid #dce5f1;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.unpaid-btn-tutup:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
 </style>
 
 <!-- ==========================================
@@ -1105,12 +2374,12 @@ $categoryData = [
             </div>
 
             <!-- Card 2: Outstanding PO -->
-            <div class="p-card card-blue">
+            <div class="p-card card-blue" style="cursor: pointer;" onclick="openOutstandingModal()" title="Klik untuk meninjau Daftar Outstanding PO">
                 <div class="p-card-header">
                     <h3 class="p-card-title">Outstanding PO</h3>
-                    <a href="#" class="p-circle-btn btn-blue" title="Lihat Detail Outstanding PO">
+                    <button type="button" class="p-circle-btn btn-blue" onclick="event.stopPropagation(); openOutstandingModal();" title="Lihat Detail Outstanding PO">
                         <i class="bi bi-arrow-up-right"></i>
-                    </a>
+                    </button>
                 </div>
 
                 <div class="p-card-metric">
@@ -1125,12 +2394,12 @@ $categoryData = [
             </div>
 
             <!-- Card 3: Pembelian Belum Dilunasi -->
-            <div class="p-card card-red">
+            <div class="p-card card-red" style="cursor: pointer;" onclick="openUnpaidModal()" title="Klik untuk meninjau Pembelian Belum Dilunasi">
                 <div class="p-card-header">
                     <h3 class="p-card-title">Pembelian Belum Dilunasi</h3>
-                    <a href="#" class="p-circle-btn btn-red" title="Lihat Detail Pembelian Belum Dilunasi">
+                    <button type="button" class="p-circle-btn btn-red" onclick="event.stopPropagation(); openUnpaidModal();" title="Lihat Detail Pembelian Belum Dilunasi">
                         <i class="bi bi-arrow-up-right"></i>
-                    </a>
+                    </button>
                 </div>
 
                 <div class="p-card-metric">
@@ -1275,6 +2544,259 @@ $categoryData = [
         </div>
 
     </section>
+
+    <!-- ==========================================
+         MODAL POPUP: DAFTAR OUTSTANDING PO
+    ========================================== -->
+    <div class="po-modal-overlay" id="outstandingPoModal" onclick="handlePoBackdropClick(event)">
+        <div class="po-modal-window" onclick="event.stopPropagation()">
+
+            <!-- Header Modal -->
+            <div class="po-modal-header">
+                <div class="po-header-left">
+                    <div class="po-header-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <div class="po-header-text">
+                        <h3>
+                            Daftar Outstanding PO
+                            <span class="po-header-badge" id="poHeaderBadge"><?= count($outstandingList) ?> Data Terkini</span>
+                        </h3>
+                        <p>Klik baris No. PO untuk meninjau rincian barang</p>
+                    </div>
+                </div>
+
+                <div class="po-header-actions">
+                    <div class="po-search-input-wrap">
+                        <i class="bi bi-search"></i>
+                        <input
+                            type="text"
+                            id="poSearchInput"
+                            placeholder="Cari No. PO, Supplier..."
+                            oninput="filterPoList()"
+                        >
+                    </div>
+
+                    <select id="poStatusFilter" class="po-select-status" onchange="filterPoList()">
+                        <option value="all">Semua Status</option>
+                        <option value="Belum Dikirim">Belum Dikirim</option>
+                        <option value="Dikirim Sebagian">Dikirim Sebagian</option>
+                    </select>
+
+                    <button type="button" class="po-btn-export" onclick="exportPoList()">
+                        <i class="bi bi-box-arrow-up"></i>
+                        Export
+                    </button>
+
+                    <button type="button" class="po-btn-close-x" onclick="closeOutstandingModal()" title="Tutup Modal">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Body Modal: Master-Detail -->
+            <div class="po-modal-body">
+
+                <!-- Panel Kiri: Tabel PO -->
+                <div class="po-panel-left">
+                    <table class="po-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 45px;">#</th>
+                                <th>No. PO &amp; Supplier</th>
+                                <th>Tgl Transaksi</th>
+                                <th>Tgl Pengiriman</th>
+                                <th>Nominal</th>
+                                <th>Status</th>
+                                <th style="width: 30px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="poTableBody">
+                            <!-- Rendered by JavaScript -->
+                        </tbody>
+                    </table>
+                    <div id="poEmptyMessage" style="display: none; padding: 40px 20px; text-align: center; color: #94a3b8;">
+                        <i class="bi bi-inbox" style="font-size: 32px; display: block; margin-bottom: 8px;"></i>
+                        Tidak ada data Purchasing Order yang sesuai dengan pencarian.
+                    </div>
+                </div>
+
+                <!-- Panel Kanan: Rincian Barang -->
+                <div class="po-panel-right">
+                    <div class="po-detail-top-row">
+                        <div class="po-detail-header-left">
+                            <span class="po-badge-rincian">RINCIAN BARANG</span>
+                            <span class="po-detail-nopo" id="detailNoPo">-</span>
+                        </div>
+                        <div id="detailStatusWrap">
+                            <!-- Status Badge -->
+                        </div>
+                    </div>
+
+                    <div class="po-detail-supplier-name" id="detailSupplier">-</div>
+
+                    <div class="po-detail-boxes">
+                        <div class="po-meta-card">
+                            <span>Tgl Transaksi:</span>
+                            <strong id="detailTglTrans">-</strong>
+                        </div>
+                        <div class="po-meta-card">
+                            <span>Tgl Pengiriman:</span>
+                            <strong id="detailTglKirim">-</strong>
+                        </div>
+                    </div>
+
+                    <div class="po-keterangan-alert" id="detailKeteranganBox">
+                        <strong><i class="bi bi-info-circle"></i> Catatan PO:</strong>
+                        <span id="detailKeterangan">-</span>
+                    </div>
+
+                    <div class="po-items-title-bar">
+                        <h5>Daftar Barang yang Dipesan</h5>
+                        <span class="po-items-count-tag" id="detailItemsCount">0 Macam Barang</span>
+                    </div>
+
+                    <div class="po-items-table-wrap">
+                        <table class="po-items-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama Barang</th>
+                                    <th>Satuan</th>
+                                    <th style="text-align: center;">Qty Total</th>
+                                    <th style="text-align: center;">Qty Kirim</th>
+                                    <th style="text-align: center;">Qty Sisa</th>
+                                    <th style="text-align: right;">Nominal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailItemsTableBody">
+                                <!-- Rendered by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="po-detail-footer-summary">
+                        <span>Total Nominal PO Terpilih:</span>
+                        <strong id="detailTotalNominal">Rp 0</strong>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="po-modal-bottom">
+                <div class="po-bottom-info" id="poFooterCount">
+                    Menampilkan <?= count($outstandingList) ?> total Purchasing Order
+                </div>
+
+                <div class="po-bottom-controls">
+                    <button type="button" class="po-page-btn disabled">&lsaquo; Sebelumnya</button>
+                    <button type="button" class="po-page-btn active">1</button>
+                    <button type="button" class="po-page-btn disabled">Selanjutnya &rsaquo;</button>
+                    <button type="button" class="po-btn-tutup" onclick="closeOutstandingModal()">Tutup</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL POPUP: DAFTAR PEMBELIAN BELUM DILUNASI
+    ========================================== -->
+    <div class="unpaid-modal-overlay" id="unpaidBillsModal" onclick="handleUnpaidBackdropClick(event)">
+        <div class="unpaid-modal-window" onclick="event.stopPropagation()">
+
+            <!-- Header Modal -->
+            <div class="unpaid-modal-header">
+                <div class="unpaid-header-top">
+                    <div class="unpaid-header-left">
+                        <div class="unpaid-header-icon">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                        <div class="unpaid-header-title-wrap">
+                            <h3>
+                                Daftar Pembelian Belum Dilunasi
+                                <span class="unpaid-badge-count" id="unpaidHeaderBadge">
+                                    <span class="dot"></span>
+                                    <?= count($unpaidList) ?> Tagihan Belum Lunas
+                                </span>
+                            </h3>
+                            <p>Daftar faktur pembelian tempo dan nota beli (NB) yang menunggu pelunasan pembayaran</p>
+                        </div>
+                    </div>
+
+                    <div class="unpaid-header-summary-card">
+                        <span>TOTAL KURANG BAYAR</span>
+                        <strong id="unpaidSummaryTotal">Rp <?= number_format($unpaidNominal, 0, ',', '.') ?>,00</strong>
+                    </div>
+                </div>
+
+                <div class="unpaid-header-controls">
+                    <div class="unpaid-controls-left">
+                        <div class="unpaid-search-wrap">
+                            <i class="bi bi-search"></i>
+                            <input
+                                type="text"
+                                id="unpaidSearchInput"
+                                placeholder="Cari Supplier, No. NB, No. Pelunasan..."
+                                oninput="filterUnpaidList()"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="unpaid-controls-right">
+                        <button type="button" class="unpaid-btn-export" onclick="exportUnpaidList()">
+                            <i class="bi bi-box-arrow-up"></i>
+                            Export
+                        </button>
+
+                        <button type="button" class="unpaid-btn-close-x" onclick="closeUnpaidModal()" title="Tutup Modal">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body Modal: Tabel Full Width -->
+            <div class="unpaid-modal-body">
+                <table class="unpaid-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th>Supplier</th>
+                            <th>No. NB</th>
+                            <th>No. Pelunasan</th>
+                            <th>Tgl. Pembelian</th>
+                            <th>Tgl. Tempo Pembelian</th>
+                            <th style="text-align: right;">Nominal</th>
+                            <th style="text-align: right;">Kurang Bayar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="unpaidTableBody">
+                        <!-- Rendered by JavaScript -->
+                    </tbody>
+                </table>
+                <div id="unpaidEmptyMessage" style="display: none; padding: 40px 20px; text-align: center; color: #94a3b8;">
+                    <i class="bi bi-inbox" style="font-size: 32px; display: block; margin-bottom: 8px;"></i>
+                    Tidak ada data Pembelian Belum Dilunasi yang sesuai dengan pencarian.
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="unpaid-modal-bottom">
+                <div class="unpaid-bottom-info" id="unpaidFooterCount">
+                    Menampilkan <?= count($unpaidList) ?> dari <?= count($unpaidList) ?> total Pembelian Belum Dilunasi
+                </div>
+
+                <div class="unpaid-bottom-controls">
+                    <button type="button" class="po-page-btn disabled">&lsaquo; Sebelumnya</button>
+                    <button type="button" class="po-page-btn active">1</button>
+                    <button type="button" class="po-page-btn disabled">Selanjutnya &rsaquo;</button>
+                    <button type="button" class="unpaid-btn-tutup" onclick="closeUnpaidModal()">Tutup</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
    
 </main>
 
@@ -1435,6 +2957,323 @@ todayCheckbox.addEventListener('change', function() {
 // ======================================
 function exportExcel() {
     alert('Fitur Export Excel akan diaktifkan setelah data pembelian terhubung dengan database.');
+}
+
+// ======================================
+// 5. MODAL DAFTAR OUTSTANDING PO
+// ======================================
+const outstandingData = <?= json_encode($outstandingList) ?>;
+let selectedPoIndex = 0;
+let filteredPoIndices = outstandingData.map((_, i) => i);
+
+function formatRupiah(number) {
+    return 'Rp ' + Number(number).toLocaleString('id-ID');
+}
+
+function openOutstandingModal() {
+    const modal = document.getElementById('outstandingPoModal');
+    if (!modal) return;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Reset filter
+    document.getElementById('poSearchInput').value = '';
+    document.getElementById('poStatusFilter').value = 'all';
+    filterPoList();
+}
+
+function closeOutstandingModal() {
+    const modal = document.getElementById('outstandingPoModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function handlePoBackdropClick(e) {
+    if (e.target.id === 'outstandingPoModal') {
+        closeOutstandingModal();
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeOutstandingModal();
+        closeUnpaidModal();
+    }
+});
+
+function renderPoTable() {
+    const tbody = document.getElementById('poTableBody');
+    const emptyMsg = document.getElementById('poEmptyMessage');
+    tbody.innerHTML = '';
+
+    if (filteredPoIndices.length === 0) {
+        emptyMsg.style.display = 'block';
+        clearPoDetail();
+        return;
+    }
+
+    emptyMsg.style.display = 'none';
+
+    filteredPoIndices.forEach((dataIndex, loopIdx) => {
+        const po = outstandingData[dataIndex];
+        const tr = document.createElement('tr');
+        if (dataIndex === selectedPoIndex) {
+            tr.classList.add('active-row');
+        }
+
+        const rowNum = String(loopIdx + 1).padStart(2, '0');
+        const badgeClass = po.status === 'Dikirim Sebagian' ? 'amber' : 'blue';
+
+        tr.innerHTML = `
+            <td class="po-row-num">${rowNum}</td>
+            <td>
+                <div class="po-number-cell">${po.no_po}</div>
+                <div class="po-supplier-cell">${po.nama_supplier}</div>
+            </td>
+            <td class="po-date-cell">${po.tgl_trans}</td>
+            <td class="po-date-cell">${po.tgl_kirim}</td>
+            <td class="po-nominal-cell">${formatRupiah(po.jumlah)}</td>
+            <td>
+                <span class="po-status-badge ${badgeClass}">
+                    <span class="dot"></span>
+                    ${po.status}
+                </span>
+            </td>
+            <td class="po-arrow-cell">
+                <i class="bi bi-chevron-right"></i>
+            </td>
+        `;
+
+        tr.addEventListener('click', () => {
+            selectPo(dataIndex);
+        });
+
+        tbody.appendChild(tr);
+    });
+
+    // Pastikan panel rincian menampilkan PO yang valid
+    if (!filteredPoIndices.includes(selectedPoIndex)) {
+        selectPo(filteredPoIndices[0]);
+    } else {
+        renderPoDetail(outstandingData[selectedPoIndex]);
+    }
+
+    // Perbarui counter di footer
+    const footerCount = document.getElementById('poFooterCount');
+    if (footerCount) {
+        footerCount.innerText = `Menampilkan ${filteredPoIndices.length} dari ${outstandingData.length} total Purchasing Order`;
+    }
+}
+
+function selectPo(index) {
+    selectedPoIndex = index;
+    const po = outstandingData[index];
+
+    // Beri highlight pada baris aktif
+    const tbody = document.getElementById('poTableBody');
+    const rows = tbody.querySelectorAll('tr');
+    filteredPoIndices.forEach((dataIndex, loopIdx) => {
+        if (rows[loopIdx]) {
+            if (dataIndex === selectedPoIndex) {
+                rows[loopIdx].classList.add('active-row');
+            } else {
+                rows[loopIdx].classList.remove('active-row');
+            }
+        }
+    });
+
+    renderPoDetail(po);
+}
+
+function renderPoDetail(po) {
+    if (!po) return;
+
+    document.getElementById('detailNoPo').innerText = po.no_po;
+    document.getElementById('detailSupplier').innerText = po.nama_supplier;
+    document.getElementById('detailTglTrans').innerText = po.tgl_trans;
+    document.getElementById('detailTglKirim').innerText = po.tgl_kirim;
+    
+    const ketBox = document.getElementById('detailKeteranganBox');
+    if (po.keterangan) {
+        ketBox.style.display = 'block';
+        document.getElementById('detailKeterangan').innerText = ' ' + po.keterangan;
+    } else {
+        ketBox.style.display = 'none';
+    }
+
+    const badgeClass = po.status === 'Dikirim Sebagian' ? 'amber' : 'blue';
+    document.getElementById('detailStatusWrap').innerHTML = `
+        <span class="po-status-badge ${badgeClass}">
+            <span class="dot"></span>
+            ${po.status}
+        </span>
+    `;
+
+    document.getElementById('detailItemsCount').innerText = `${po.items.length} Macam Barang`;
+    document.getElementById('detailTotalNominal').innerText = formatRupiah(po.jumlah);
+
+    const itemsTbody = document.getElementById('detailItemsTableBody');
+    itemsTbody.innerHTML = '';
+
+    po.items.forEach(item => {
+        const itemTr = document.createElement('tr');
+        itemTr.innerHTML = `
+            <td>
+                <div style="font-weight: 700; color: #1e293b;">${item.nama_barang}</div>
+                ${item.keterangan ? `<div class="po-item-note"><i class="bi bi-tag"></i> ${item.keterangan}</div>` : ''}
+            </td>
+            <td style="color: #64748b; font-weight: 600;">${item.satuan}</td>
+            <td class="qty-col">${item.qty}</td>
+            <td class="qty-col" style="color: #059669;">${item.qty_kirim}</td>
+            <td class="qty-col" style="color: ${item.sisa_qty > 0 ? '#d97706' : '#64748b'};">${item.sisa_qty}</td>
+            <td class="subtotal-col">${formatRupiah(item.subtotal)}</td>
+        `;
+        itemsTbody.appendChild(itemTr);
+    });
+}
+
+function clearPoDetail() {
+    document.getElementById('detailNoPo').innerText = '-';
+    document.getElementById('detailSupplier').innerText = '-';
+    document.getElementById('detailTglTrans').innerText = '-';
+    document.getElementById('detailTglKirim').innerText = '-';
+    document.getElementById('detailKeterangan').innerText = '-';
+    document.getElementById('detailStatusWrap').innerHTML = '';
+    document.getElementById('detailItemsCount').innerText = '0 Macam Barang';
+    document.getElementById('detailTotalNominal').innerText = 'Rp 0';
+    document.getElementById('detailItemsTableBody').innerHTML = '';
+}
+
+function filterPoList() {
+    const searchInput = document.getElementById('poSearchInput');
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const statusSelect = document.getElementById('poStatusFilter');
+    const statusVal = statusSelect ? statusSelect.value : 'all';
+
+    filteredPoIndices = [];
+
+    outstandingData.forEach((po, index) => {
+        const matchSearch = 
+            po.no_po.toLowerCase().includes(searchVal) || 
+            po.nama_supplier.toLowerCase().includes(searchVal);
+
+        const matchStatus = (statusVal === 'all') || (po.status === statusVal);
+
+        if (matchSearch && matchStatus) {
+            filteredPoIndices.push(index);
+        }
+    });
+
+    renderPoTable();
+}
+
+function exportPoList() {
+    alert('Mengekspor ' + filteredPoIndices.length + ' data Outstanding PO...');
+}
+
+// ======================================
+// 6. MODAL PEMBELIAN BELUM DILUNASI
+// ======================================
+const unpaidData = <?= json_encode($unpaidList) ?>;
+let filteredUnpaidIndices = unpaidData.map((_, i) => i);
+
+function openUnpaidModal() {
+    const modal = document.getElementById('unpaidBillsModal');
+    if (!modal) return;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Reset filter
+    const searchInput = document.getElementById('unpaidSearchInput');
+    if (searchInput) searchInput.value = '';
+
+    filterUnpaidList();
+}
+
+function closeUnpaidModal() {
+    const modal = document.getElementById('unpaidBillsModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function handleUnpaidBackdropClick(e) {
+    if (e.target.id === 'unpaidBillsModal') {
+        closeUnpaidModal();
+    }
+}
+
+function renderUnpaidTable() {
+    const tbody = document.getElementById('unpaidTableBody');
+    const emptyMsg = document.getElementById('unpaidEmptyMessage');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (filteredUnpaidIndices.length === 0) {
+        if (emptyMsg) emptyMsg.style.display = 'block';
+        return;
+    }
+
+    if (emptyMsg) emptyMsg.style.display = 'none';
+
+    filteredUnpaidIndices.forEach((dataIndex, loopIdx) => {
+        const item = unpaidData[dataIndex];
+        const tr = document.createElement('tr');
+
+        const rowNum = '#' + String(loopIdx + 1).padStart(2, '0');
+
+        tr.innerHTML = `
+            <td class="unpaid-row-num">${rowNum}</td>
+            <td class="unpaid-supplier-text">${item.supplier}</td>
+            <td><span class="unpaid-nb-badge">${item.no_nb}</span></td>
+            <td><span class="unpaid-pelunasan-badge">${item.no_pelunasan}</span></td>
+            <td class="unpaid-date-text">${item.tgl_pembelian}</td>
+            <td class="unpaid-date-text">${item.tgl_tempo}</td>
+            <td class="unpaid-nominal-text" style="text-align: right;">${formatRupiah(item.nominal)}</td>
+            <td class="unpaid-kurang-bayar-text" style="text-align: right;">${formatRupiah(item.kurang_bayar)}</td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+
+    // Update footer info & summary card total for filtered items
+    const footerCount = document.getElementById('unpaidFooterCount');
+    if (footerCount) {
+        footerCount.innerText = `Menampilkan ${filteredUnpaidIndices.length} dari ${unpaidData.length} total Pembelian Belum Dilunasi`;
+    }
+
+    const currentKurangBayar = filteredUnpaidIndices.reduce((sum, idx) => sum + unpaidData[idx].kurang_bayar, 0);
+    const summaryTotal = document.getElementById('unpaidSummaryTotal');
+    if (summaryTotal) {
+        summaryTotal.innerText = formatRupiah(currentKurangBayar) + ',00';
+    }
+}
+
+function filterUnpaidList() {
+    const searchInput = document.getElementById('unpaidSearchInput');
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+    filteredUnpaidIndices = [];
+
+    unpaidData.forEach((item, index) => {
+        const matchSearch = 
+            item.supplier.toLowerCase().includes(searchVal) ||
+            item.no_nb.toLowerCase().includes(searchVal) || 
+            item.no_pelunasan.toLowerCase().includes(searchVal) ||
+            item.tgl_pembelian.toLowerCase().includes(searchVal) ||
+            item.tgl_tempo.toLowerCase().includes(searchVal);
+
+        if (matchSearch) {
+            filteredUnpaidIndices.push(index);
+        }
+    });
+
+    renderUnpaidTable();
+}
+
+function exportUnpaidList() {
+    alert('Mengekspor ' + filteredUnpaidIndices.length + ' data Pembelian Belum Dilunasi...');
 }
 </script>
 
