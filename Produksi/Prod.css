@@ -1,0 +1,750 @@
+/* ==================================================
+   DASHBOARD PRODUKSI - GENERAL
+================================================== */
+
+.production-dashboard {
+    width: 100%;
+    padding: 24px 28px;
+    background: #f5f7fc;
+    min-height: calc(100vh - 100px);
+}
+
+.production-dashboard * {
+    box-sizing: border-box;
+}
+
+
+/* ==================================================
+   HEADER DASHBOARD
+================================================== */
+
+.production-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.production-heading-info {
+    min-width: 0;
+}
+
+.production-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.production-title .heading-icon {
+    color: #0866c6;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.production-title h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #25364d;
+    margin: 0;
+}
+
+
+/* ==================================================
+   TOMBOL HEADER
+================================================== */
+
+.production-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.production-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #dce5f1;
+    background: #ffffff;
+    color: #46566d;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.production-btn:hover {
+    background: #edf4ff;
+    color: #0866c6;
+    border-color: #bcd5f5;
+}
+
+.production-btn.primary {
+    background: #0866c6;
+    color: #ffffff;
+    border-color: #0866c6;
+}
+
+.production-btn.primary:hover {
+    background: #0754a5;
+    border-color: #0754a5;
+}
+
+
+/* ==================================================
+   FILTER PERIODE
+================================================== */
+
+.production-filter {
+    width: 100%;
+    background: #eaf2ff;
+    border: 1px solid #dce9fb;
+    border-radius: 15px;
+    padding: 20px 26px;
+    margin-bottom: 22px;
+}
+
+.production-filter-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #53647c;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.production-filter-title i {
+    margin-right: 5px;
+}
+
+.production-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.production-filter-form input[type="date"] {
+    height: 54px;
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    padding: 0 16px;
+    background: #ffffff;
+    border: 1px solid #dce4f0;
+    border-radius: 10px;
+    color: #42536b;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.production-filter-form input[type="date"]:focus {
+    border-color: #0866c6;
+    box-shadow: 0 0 0 3px rgba(8, 102, 198, 0.1);
+}
+
+.production-filter-form .separator {
+    font-size: 13px;
+    color: #738198;
+    white-space: nowrap;
+}
+
+.production-filter-submit {
+    height: 54px;
+    padding: 0 30px;
+    border: none;
+    border-radius: 10px;
+    background: #0866c6;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.production-filter-submit:hover {
+    background: #0754a5;
+}
+
+.production-today {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 18px;
+    background: #ffffff;
+    border: 1px solid #dce4f0;
+    border-radius: 10px;
+    color: #53647c;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.production-today input {
+    width: 16px;
+    height: 16px;
+    accent-color: #0866c6;
+    cursor: pointer;
+}
+
+.production-today i {
+    color: #0866c6;
+}
+
+
+/* ==================================================
+   GRID DASHBOARD
+================================================== */
+
+.production-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* ==================================================
+   CARD UMUM
+================================================== */
+
+.production-card {
+    background: #ffffff;
+    border: 2px solid #e9eef6;
+    border-radius: 16px;
+    padding: 24px 26px;
+    box-shadow: 0 2px 8px rgba(32, 66, 110, 0.035);
+    min-width: 0;
+    transition: box-shadow 0.2s ease;
+}
+
+.production-card:hover {
+    box-shadow: 0 5px 16px rgba(32, 66, 110, 0.07);
+}
+
+/* Outline biru - WO */
+.production-card.blue-outline {
+    border-color: #0875d1;
+}
+
+/* Outline hijau - PB dan SB */
+.production-card.green-outline {
+    border-color: #00b77a;
+}
+
+/* Outline oranye - Rasio */
+.production-card.orange-outline {
+    border-color: #ff925c;
+}
+
+
+/* ==================================================
+   HEADING CARD
+================================================== */
+
+.production-card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 15px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #edf1f7;
+}
+
+.production-card-heading h3 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #25364d;
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 0.3px;
+}
+
+.production-card-heading h3 > i {
+    font-size: 18px;
+    color: #0866c6;
+}
+
+.production-total {
+    padding: 7px 11px;
+    border-radius: 20px;
+    background: #e8efff;
+    color: #2563c5;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.production-total.green {
+    background: #d9f5e9;
+    color: #07845e;
+}
+
+
+/* ==================================================
+   CARD RINGKASAN WO DAN PB
+================================================== */
+
+.production-summary-card {
+    grid-column: span 2;
+}
+
+.production-donut-content {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 145px;
+}
+
+.production-donut-wrap {
+    width: 125px;
+    height: 125px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.production-donut-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.production-donut-center strong {
+    color: #25364d;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.production-donut-center span {
+    color: #8794a8;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   LEGEND DONUT
+================================================== */
+
+.production-legend {
+    flex: 1;
+    min-width: 0;
+}
+
+.production-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 13px 0;
+    font-size: 11px;
+    color: #526178;
+}
+
+.production-legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.production-legend-label {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.4;
+}
+
+.production-legend-value {
+    color: #25364d;
+    font-weight: 800;
+}
+
+.production-legend-percent {
+    min-width: 40px;
+    text-align: right;
+    color: #8995a8;
+    font-size: 10px;
+}
+
+
+/* ==================================================
+   CARD RASIO PENGGUNAAN BAHAN
+================================================== */
+
+.production-ratio-card {
+    grid-column: span 2;
+}
+
+.production-target {
+    background: #fff0e5;
+    color: #e87528;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.production-ratio-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.production-ratio-main {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.production-ratio-number {
+    font-size: 38px;
+    font-weight: 800;
+    color: #e87528;
+    line-height: 1;
+}
+
+.production-efficiency {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #d7fbe9;
+    color: #07834d;
+    padding: 7px 10px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.production-ratio-description {
+    color: #65738a;
+    font-size: 11px;
+    margin-top: 11px;
+    line-height: 1.5;
+}
+
+
+/* ==================================================
+   DETAIL RASIO
+================================================== */
+
+.production-ratio-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #fff7f1;
+    border: 1px solid #ffeadc;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-top: 18px;
+    color: #65738a;
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+.production-ratio-detail > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.production-ratio-detail strong {
+    color: #25364d;
+    font-weight: 800;
+    text-align: right;
+}
+
+
+/* ==================================================
+   CARD GRAFIK
+================================================== */
+
+.production-chart-card {
+    grid-column: span 3;
+    min-height: 370px;
+}
+
+.production-chart-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.production-chart-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: #e8efff;
+    color: #0866c6;
+    border-radius: 8px;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.production-chart-icon.danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.production-average {
+    padding: 7px 11px;
+    background: #e5edff;
+    color: #315da8;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.production-average.danger {
+    background: #fee2e2;
+    color: #c62828;
+}
+
+.production-chart-container {
+    position: relative;
+    height: 260px;
+    background: #f7f9fd;
+    border: 1px solid #edf1f7;
+    border-radius: 11px;
+    padding: 14px;
+}
+
+
+/* ==================================================
+   RESPONSIVE TABLET
+================================================== */
+
+@media (max-width: 1100px) {
+
+    .production-dashboard {
+        padding: 20px;
+    }
+
+    .production-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .production-summary-card {
+        grid-column: span 1;
+    }
+
+    .production-ratio-card {
+        grid-column: span 2;
+    }
+
+    .production-chart-card {
+        grid-column: span 1;
+    }
+
+    .production-donut-content {
+        gap: 12px;
+    }
+
+    .production-donut-wrap {
+        width: 110px;
+        height: 110px;
+    }
+
+    .production-card {
+        padding: 20px;
+    }
+
+}
+
+
+/* ==================================================
+   RESPONSIVE MOBILE
+================================================== */
+
+@media (max-width: 650px) {
+
+    .production-dashboard {
+        padding: 16px 12px;
+    }
+
+    .production-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .production-title h1 {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    .production-title .heading-icon {
+        font-size: 20px;
+    }
+
+    .production-actions {
+        width: 100%;
+    }
+
+    .production-btn {
+        flex: 1;
+        padding: 10px 8px;
+        font-size: 10px;
+    }
+
+    .production-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .production-summary-card,
+    .production-ratio-card,
+    .production-chart-card {
+        grid-column: span 1;
+    }
+
+    .production-card {
+        padding: 19px 17px;
+        border-radius: 14px;
+    }
+
+    .production-card-heading {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .production-card-heading h3 {
+        font-size: 14px;
+    }
+
+    .production-filter {
+        padding: 17px;
+        margin-bottom: 16px;
+    }
+
+    .production-filter-form {
+        flex-wrap: wrap;
+    }
+
+    .production-filter-form input[type="date"] {
+        flex: 1 1 40%;
+        min-width: 120px;
+    }
+
+    .production-filter-form .separator {
+        display: none;
+    }
+
+    .production-filter-submit {
+        flex: 1;
+    }
+
+    .production-today {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .production-donut-content {
+        gap: 15px;
+    }
+
+    .production-donut-wrap {
+        width: 115px;
+        height: 115px;
+    }
+
+    .production-chart-card {
+        min-height: 330px;
+    }
+
+    .production-chart-container {
+        height: 230px;
+    }
+
+    .production-ratio-content {
+        flex-wrap: wrap;
+    }
+
+    .production-ratio-number {
+        font-size: 34px;
+    }
+
+}
+
+
+/* ==================================================
+   RESPONSIVE LAYAR SANGAT KECIL
+================================================== */
+
+@media (max-width: 380px) {
+
+    .production-donut-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .production-donut-wrap {
+        align-self: center;
+    }
+
+    .production-legend {
+        width: 100%;
+    }
+
+    .production-legend-item {
+        font-size: 10px;
+    }
+
+    .production-ratio-detail {
+        font-size: 10px;
+    }
+
+}
+
+
+/* ==================================================
+   PRINT
+================================================== */
+
+@media print {
+
+    body {
+        background: #ffffff !important;
+    }
+
+    .production-dashboard {
+        padding: 10px;
+        background: #ffffff;
+    }
+
+    .production-actions,
+    .production-filter {
+        display: none !important;
+    }
+
+    .production-card {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .production-grid {
+        gap: 12px;
+    }
+
+}

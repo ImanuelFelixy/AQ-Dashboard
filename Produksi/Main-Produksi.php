@@ -5,11 +5,16 @@ $basePath = '../';
 
 require_once '../includes/header.php';
 
-// ==========================================
-// DATA SEMENTARA (DUMMY)
-// Nantinya akan diganti dengan data MySQL
-// ==========================================
+/*
+|--------------------------------------------------------------------------
+| DATA SEMENTARA (DUMMY)
+|--------------------------------------------------------------------------
+| Nantinya bagian ini akan dipindahkan ke data-produksi.php
+| dan diganti dengan data dari database MySQL.
+|--------------------------------------------------------------------------
+*/
 
+// Data Work Order
 $woTotal = 125;
 
 $woData = [
@@ -30,6 +35,7 @@ $woData = [
     ]
 ];
 
+// Data Permintaan dan Penyerahan Bahan
 $pbTotal = 120;
 
 $pbData = [
@@ -50,717 +56,45 @@ $pbData = [
     ]
 ];
 
+// Filter tanggal
 $startDate = $_GET['tanggal_awal'] ?? date('Y-m-01');
 $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
 
+// Pastikan format tanggal valid
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate)) {
+    $startDate = date('Y-m-01');
+}
+
+if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
+    $endDate = date('Y-m-d');
+}
 ?>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
-
-/* ==========================================
-   GENERAL
-========================================== */
-
-.production-dashboard {
-    width: 100%;
-    padding: 24px 28px;
-    background: #f5f7fc;
-    min-height: calc(100vh - 100px);
-}
-
-.production-dashboard * {
-    box-sizing: border-box;
-}
-
-
-/* ==========================================
-   HEADER DASHBOARD
-========================================== */
-
-.production-heading-info {
-    min-width: 0;
-}
-
-.production-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.production-title .heading-icon {
-    color: #0866c6;
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-.production-title h1 {
-    font-size: 22px;
-    font-weight: 800;
-    color: #25364d;
-    margin: 0;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 650px) {
-    .production-title h1 {
-        font-size: 18px;
-    }
-}
-
-.production-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.production-heading h1 {
-    font-size: 22px;
-    font-weight: 800;
-    color: #25364d;
-    margin: 5px 0 10px;
-}
-
-.production-heading .heading-icon {
-    color: #0866c6;
-    font-size: 22px;
-}
-
-.production-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-top: 12px;
-}
-
-.production-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #e8f1ff;
-    color: #0866c6;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 9px;
-    font-weight: 800;
-}
-
-.production-tag.teal {
-    background: #d9f7f4;
-    color: #087f80;
-}
-
-.production-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-}
-
-.production-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 9px 12px;
-    border-radius: 7px;
-    border: 1px solid #dce5f1;
-    background: #fff;
-    color: #46566d;
-    font-size: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: .2s;
-}
-
-.production-btn:hover {
-    background: #edf4ff;
-    color: #0866c6;
-}
-
-.production-btn.primary {
-    background: #0866c6;
-    color: #fff;
-    border-color: #0866c6;
-}
-
-.production-btn.primary:hover {
-    background: #0754a5;
-}
-
-
-/* ==========================================
-   FILTER PERIODE - FULL WIDTH
-========================================== */
-
-.production-filter {
-    width: 100%;
-    background: #eaf2ff;
-    border: 1px solid #dce9fb;
-    border-radius: 13px;
-    padding: 20px 26px;
-    margin-bottom: 18px;
-}
-
-.production-filter-title {
-    font-size: 12px;
-    font-weight: 800;
-    color: #53647c;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-}
-
-.production-filter-form {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-}
-
-.production-filter-form input[type="date"] {
-    height: 54px;
-    flex: 1;
-    min-width: 0;
-    width: auto;
-    padding: 0 15px;
-    background: #fff;
-    border: 1px solid #dce4f0;
-    border-radius: 9px;
-    color: #42536b;
-    font-size: 13px;
-}
-
-.production-filter-form .separator {
-    font-size: 13px;
-    color: #738198;
-    white-space: nowrap;
-}
-
-.production-filter-submit {
-    height: 54px;
-    padding: 0 28px;
-    border: none;
-    border-radius: 9px;
-    background: #0866c6;
-    color: white;
-    font-size: 12px;
-    font-weight: 700;
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-.production-filter-submit:hover {
-    background: #0754a5;
-}
-
-.production-today {
-    height: 54px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 0 18px;
-    background: white;
-    border: 1px solid #dce4f0;
-    border-radius: 9px;
-    color: #53647c;
-    font-size: 12px;
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-
-/* ==========================================
-   DASHBOARD GRID
-   6 KOLOM UNTUK DESKTOP
-========================================== */
-
-.production-grid {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 16px;
-}
-
-
-/* ==========================================
-   CARD UMUM
-========================================== */
-
-.production-card {
-    background: #fff;
-    border: 1px solid #e9eef6;
-    border-radius: 11px;
-    padding: 17px;
-    box-shadow: 0 2px 8px rgba(32, 66, 110, .035);
-    min-width: 0;
-}
-
-.production-card.blue-bottom {
-    border-bottom: 4px solid #0875d1;
-}
-
-.production-card.green-bottom {
-    border-bottom: 4px solid #07866b;
-}
-
-.production-card-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding-bottom: 12px;
-    margin-bottom: 13px;
-    border-bottom: 1px solid #edf1f7;
-}
-
-.production-card-heading h3 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #34445c;
-    font-size: 12px;
-    font-weight: 800;
-    margin: 0;
-}
-
-.production-card-heading h3 i {
-    font-size: 16px;
-    color: #0866c6;
-}
-
-.production-total {
-    padding: 5px 10px;
-    border-radius: 20px;
-    background: #e8efff;
-    color: #2563c5;
-    font-size: 10px;
-    font-weight: 800;
-    white-space: nowrap;
-}
-
-.production-total.green {
-    background: #d9f5f4;
-    color: #087f80;
-}
-
-
-/* ==========================================
-   KARTU WO DAN PB
-========================================== */
-
-.production-summary-card {
-    grid-column: span 2;
-}
-
-.production-donut-content {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    min-height: 130px;
-}
-
-.production-donut-wrap {
-    width: 115px;
-    height: 115px;
-    position: relative;
-    flex-shrink: 0;
-}
-
-.production-donut-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-}
-
-.production-donut-center strong {
-    color: #34445c;
-    font-size: 23px;
-    font-weight: 800;
-}
-
-.production-donut-center span {
-    color: #8794a8;
-    font-size: 9px;
-    font-weight: 700;
-}
-
-.production-legend {
-    flex: 1;
-    min-width: 0;
-}
-
-.production-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 11px 0;
-    font-size: 10px;
-    color: #526178;
-}
-
-.production-legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.production-legend-label {
-    flex: 1;
-    min-width: 0;
-}
-
-.production-legend-value {
-    color: #34445c;
-    font-weight: 800;
-}
-
-.production-legend-percent {
-    width: 39px;
-    text-align: right;
-    color: #8995a8;
-    font-size: 9px;
-}
-
-
-/* ==========================================
-   RASIO PENGGUNAAN BAHAN
-========================================== */
-
-.production-ratio-card {
-    grid-column: span 2;
-    border-bottom: 4px solid #07866b;
-}
-
-.production-ratio-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.production-ratio-number {
-    font-size: 34px;
-    font-weight: 800;
-    color: #0866c6;
-    line-height: 1;
-}
-
-.production-ratio-description {
-    color: #65738a;
-    font-size: 10px;
-    margin-top: 9px;
-}
-
-.production-efficiency {
-    display: inline-block;
-    background: #d7fbe9;
-    color: #07834d;
-    padding: 6px 9px;
-    border-radius: 5px;
-    font-size: 9px;
-    font-weight: 800;
-    vertical-align: middle;
-}
-
-.production-target {
-    background: #d1fae5;
-    color: #08764b;
-    padding: 9px 12px;
-    border-radius: 8px;
-    font-size: 10px;
-    font-weight: 800;
-    min-width: 95px;
-}
-
-.production-ratio-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    background: #eef4ff;
-    padding: 10px 12px;
-    border-radius: 8px;
-    margin-top: 13px;
-    color: #65738a;
-    font-size: 10px;
-    line-height: 1.7;
-}
-
-.production-ratio-detail strong {
-    color: #0866c6;
-}
-
-
-/* ==========================================
-   GRAFIK PRODUKSI DAN REJECT
-========================================== */
-
-.production-chart-card {
-    grid-column: span 3;
-    min-height: 340px;
-}
-
-.production-chart-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.production-chart-icon {
-    width: 28px;
-    height: 28px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    background: #e8efff;
-    color: #0866c6;
-    border-radius: 6px;
-    font-size: 15px;
-    flex-shrink: 0;
-}
-
-.production-chart-icon.danger {
-    background: #fee2e2;
-    color: #dc2626;
-}
-
-.production-average {
-    padding: 6px 9px;
-    background: #e5edff;
-    color: #315da8;
-    border-radius: 7px;
-    font-size: 9px;
-    font-weight: 800;
-    white-space: nowrap;
-}
-
-.production-average.danger {
-    background: #fee2e2;
-    color: #c62828;
-}
-
-.production-chart-container {
-    position: relative;
-    height: 245px;
-    background: #f0f5ff;
-    border-radius: 9px;
-    padding: 12px;
-}
-
-
-/* ==========================================
-   FOOTER
-========================================== */
-
-.production-footer {
-    background: #1d2b3e;
-    color: #aab6c6;
-    padding: 11px 22px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-    font-size: 9px;
-}
-
-.production-footer .online {
-    color: #34d399;
-    font-weight: 800;
-}
-
-
-/* ==========================================
-   RESPONSIVE TABLET
-========================================== */
-
-@media (max-width: 1100px) {
-
-    .production-dashboard {
-        padding: 20px;
-    }
-
-    .production-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .production-summary-card {
-        grid-column: span 1;
-    }
-
-    .production-ratio-card {
-        grid-column: span 2;
-    }
-
-    .production-chart-card {
-        grid-column: span 1;
-    }
-
-    .production-donut-content {
-        gap: 10px;
-    }
-
-    .production-donut-wrap {
-        width: 105px;
-        height: 105px;
-    }
-
-}
-
-
-/* ==========================================
-   RESPONSIVE MOBILE
-========================================== */
-
-@media (max-width: 650px) {
-
-    .production-dashboard {
-        padding: 15px 12px;
-    }
-
-    .production-heading {
-        flex-direction: column;
-    }
-
-    .production-heading h1 {
-        font-size: 18px;
-    }
-
-    .production-actions {
-        width: 100%;
-    }
-
-    .production-actions button {
-        flex: 1;
-    }
-
-    .production-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .production-summary-card,
-    .production-ratio-card,
-    .production-chart-card {
-        grid-column: span 1;
-    }
-
-    .production-filter {
-        padding: 16px;
-    }
-
-    .production-filter-form {
-        flex-wrap: wrap;
-    }
-
-    .production-filter-form input[type="date"] {
-        flex: 1 1 40%;
-        min-width: 120px;
-    }
-
-    .production-filter-form .separator {
-        display: none;
-    }
-
-    .production-filter-submit {
-        flex: 1;
-    }
-
-    .production-today {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .production-donut-content {
-        gap: 15px;
-    }
-
-    .production-donut-wrap {
-        width: 115px;
-        height: 115px;
-    }
-
-    .production-chart-container {
-        height: 220px;
-    }
-
-    .production-ratio-content {
-        flex-wrap: wrap;
-    }
-
-    .production-card-heading {
-        flex-wrap: wrap;
-    }
-
-}
-
-
-/* ==========================================
-   PRINT
-========================================== */
-
-@media print {
-
-    body {
-        background: white !important;
-    }
-
-    .production-dashboard {
-        padding: 10px;
-        background: white;
-    }
-
-    .production-actions,
-    .production-filter {
-        display: none !important;
-    }
-
-    .production-card {
-        box-shadow: none;
-        break-inside: avoid;
-    }
-
-    .production-footer {
-        display: none;
-    }
-
-}
-
-</style>
-
-
-<!-- ==========================================
-     MAIN DASHBOARD
-========================================== -->
+<!-- CSS khusus Dashboard Produksi -->
+<link rel="stylesheet" href="prod.css">
 
 <main class="production-dashboard">
 
-
-    <!-- HEADER DASHBOARD -->
+    <!-- ==================================================
+         HEADER DASHBOARD
+    =================================================== -->
 
     <section class="production-heading">
 
-        <div>
+        <div class="production-heading-info">
 
             <div class="production-title">
                 <div class="heading-icon">
                     <i class="bi bi-clipboard2-data-fill"></i>
                 </div>
 
-                <h1>
-                    Dashboard Laporan Produksi — AQUAMATE
-                </h1>
+                <h1>Dashboard Laporan Produksi — AQUAMATE</h1>
             </div>
 
         </div>
-
 
         <div class="production-actions">
 
@@ -796,7 +130,9 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
     </section>
 
 
-    <!-- FILTER PERIODE -->
+    <!-- ==================================================
+         FILTER PERIODE
+    =================================================== -->
 
     <section class="production-filter">
 
@@ -835,7 +171,10 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
                 <input
                     type="checkbox"
                     id="todayOnly"
-                    <?= ($startDate === date('Y-m-d') && $endDate === date('Y-m-d')) ? 'checked' : '' ?>
+                    <?= (
+                        $startDate === date('Y-m-d') &&
+                        $endDate === date('Y-m-d')
+                    ) ? 'checked' : '' ?>
                 >
 
                 <i class="bi bi-calendar-check"></i>
@@ -848,16 +187,18 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
     </section>
 
 
-    <!-- ======================================
+    <!-- ==================================================
          GRID KARTU DASHBOARD
-    ======================================= -->
+    =================================================== -->
 
     <section class="production-grid">
 
 
-        <!-- 1. WO BELUM OPTIMASI -->
+        <!-- ==================================================
+             1. WO BELUM DIOPTIMASI
+        =================================================== -->
 
-        <div class="production-card production-summary-card blue-bottom">
+        <div class="production-card production-summary-card blue-outline">
 
             <div class="production-card-heading">
 
@@ -867,7 +208,9 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
                 </h3>
 
                 <span class="production-total">
-                    Total: <?= number_format($woTotal, 0, ',', '.') ?> WO
+                    Total:
+                    <?= number_format($woTotal, 0, ',', '.') ?>
+                    WO
                 </span>
 
             </div>
@@ -880,7 +223,9 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
                     <canvas id="woChart"></canvas>
 
                     <div class="production-donut-center">
-                        <strong><?= $woTotal ?></strong>
+                        <strong>
+                            <?= number_format($woTotal, 0, ',', '.') ?>
+                        </strong>
                         <span>WO</span>
                     </div>
 
@@ -901,7 +246,7 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
 
                             <span
                                 class="production-legend-dot"
-                                style="background: <?= $item['color'] ?>"
+                                style="background: <?= htmlspecialchars($item['color']) ?>"
                             ></span>
 
                             <span class="production-legend-label">
@@ -909,7 +254,7 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
                             </span>
 
                             <span class="production-legend-value">
-                                <?= $item['value'] ?>
+                                <?= number_format($item['value'], 0, ',', '.') ?>
                             </span>
 
                             <span class="production-legend-percent">
@@ -927,10 +272,11 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
         </div>
 
 
+        <!-- ==================================================
+             2. PERMINTAAN DAN PENYERAHAN BAHAN
+        =================================================== -->
 
-        <!-- 2. PB DAN PENYERAHAN BAHAN -->
-
-        <div class="production-card production-summary-card green-bottom">
+        <div class="production-card production-summary-card green-outline">
 
             <div class="production-card-heading">
 
@@ -940,7 +286,9 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
                 </h3>
 
                 <span class="production-total green">
-                    Total: <?= number_format($pbTotal, 0, ',', '.') ?> PB
+                    Total:
+                    <?= number_format($pbTotal, 0, ',', '.') ?>
+                    PB
                 </span>
 
             </div>
@@ -953,7 +301,9 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
                     <canvas id="pbChart"></canvas>
 
                     <div class="production-donut-center">
-                        <strong><?= $pbTotal ?></strong>
+                        <strong>
+                            <?= number_format($pbTotal, 0, ',', '.') ?>
+                        </strong>
                         <span>PB</span>
                     </div>
 
@@ -974,7 +324,7 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
 
                             <span
                                 class="production-legend-dot"
-                                style="background: <?= $item['color'] ?>"
+                                style="background: <?= htmlspecialchars($item['color']) ?>"
                             ></span>
 
                             <span class="production-legend-label">
@@ -982,7 +332,7 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
                             </span>
 
                             <span class="production-legend-value">
-                                <?= $item['value'] ?>
+                                <?= number_format($item['value'], 0, ',', '.') ?>
                             </span>
 
                             <span class="production-legend-percent">
@@ -1000,10 +350,11 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
         </div>
 
 
+        <!-- ==================================================
+             3. RASIO PENGGUNAAN BAHAN
+        =================================================== -->
 
-        <!-- 3. RASIO PENGGUNAAN BAHAN -->
-
-        <div class="production-card production-ratio-card">
+        <div class="production-card production-ratio-card orange-outline">
 
             <div class="production-card-heading">
 
@@ -1023,7 +374,7 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
 
                 <div>
 
-                    <div>
+                    <div class="production-ratio-main">
 
                         <span class="production-ratio-number">
                             1.15
@@ -1048,17 +399,17 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
             <div class="production-ratio-detail">
 
                 <div>
-                    Jml Bahan:
+                    <span>Jml Bahan:</span>
                     <strong>15,450.5 m²</strong>
                 </div>
 
                 <div>
-                    Jml Potong:
+                    <span>Jml Potong:</span>
                     <strong>13,469.8 m²</strong>
                 </div>
 
                 <div>
-                    Offcut/Trim:
+                    <span>Offcut/Trim:</span>
                     <strong>1,963.1 m²</strong>
                 </div>
 
@@ -1067,8 +418,9 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
         </div>
 
 
-
-        <!-- 4. GRAFIK PENCAPAIAN PRODUKSI -->
+        <!-- ==================================================
+             4. GRAFIK PENCAPAIAN PRODUKSI
+        =================================================== -->
 
         <div class="production-card production-chart-card">
 
@@ -1100,8 +452,9 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
         </div>
 
 
-
-        <!-- 5. GRAFIK REJECT MESIN -->
+        <!-- ==================================================
+             5. GRAFIK REJECT MESIN
+        =================================================== -->
 
         <div class="production-card production-chart-card">
 
@@ -1137,296 +490,305 @@ $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
 
 </main>
 
-<!-- ======================================
-     JAVASCRIPT
-======================================= -->
+
+<!-- ==================================================
+     JAVASCRIPT DASHBOARD PRODUKSI
+================================================== -->
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
 
-// ======================================
-// DATA DUMMY
-// ======================================
+    // ======================================
+    // DATA DUMMY DARI PHP
+    // ======================================
 
-const woData = <?= json_encode(array_column($woData, 'value')) ?>;
+    const woValues = <?= json_encode(array_column($woData, 'value')) ?>;
+    const woColors = <?= json_encode(array_column($woData, 'color')) ?>;
 
-const woColors = <?= json_encode(array_column($woData, 'color')) ?>;
-
-const pbData = <?= json_encode(array_column($pbData, 'value')) ?>;
-
-const pbColors = <?= json_encode(array_column($pbData, 'color')) ?>;
-
-
-// ======================================
-// KONFIGURASI CHART
-// ======================================
-
-Chart.defaults.font.family = "'DM Sans', sans-serif";
-Chart.defaults.font.size = 10;
-Chart.defaults.color = '#65738a';
+    const pbValues = <?= json_encode(array_column($pbData, 'value')) ?>;
+    const pbColors = <?= json_encode(array_column($pbData, 'color')) ?>;
 
 
-// ======================================
-// FUNGSI DONUT CHART
-// ======================================
+    // ======================================
+    // KONFIGURASI UMUM CHART
+    // ======================================
 
-function createDonutChart(elementId, values, colors) {
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+    Chart.defaults.font.size = 11;
+    Chart.defaults.color = '#65738a';
 
-    const canvas = document.getElementById(elementId);
 
-    new Chart(canvas, {
+    // ======================================
+    // FUNGSI DONUT CHART
+    // ======================================
 
-        type: 'doughnut',
+    function createDonutChart(elementId, values, colors) {
 
-        data: {
+        const canvas = document.getElementById(elementId);
 
-            datasets: [{
+        if (!canvas) {
+            return;
+        }
 
-                data: values,
+        new Chart(canvas, {
 
-                backgroundColor: colors,
+            type: 'doughnut',
 
-                borderWidth: 0,
+            data: {
 
-                hoverOffset: 5
+                datasets: [{
 
-            }]
+                    data: values,
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    hoverOffset: 5
 
-        },
+                }]
 
-        options: {
+            },
 
-            responsive: true,
+            options: {
 
-            maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '72%',
 
-            cutout: '72%',
+                plugins: {
 
-            plugins: {
+                    legend: {
+                        display: false
+                    },
 
-                legend: {
-                    display: false
-                },
+                    tooltip: {
+                        enabled: true
+                    }
 
-                tooltip: {
-                    enabled: true
                 }
 
             }
 
-        }
+        });
 
-    });
-
-}
+    }
 
 
-// Jalankan donut chart
-createDonutChart('woChart', woData, woColors);
+    // Jalankan donut chart
+    createDonutChart('woChart', woValues, woColors);
+    createDonutChart('pbChart', pbValues, pbColors);
 
-createDonutChart('pbChart', pbData, pbColors);
 
+    // ======================================
+    // GRAFIK PENCAPAIAN PRODUKSI
+    // ======================================
 
-// ======================================
-// GRAFIK PENCAPAIAN PRODUKSI
-// ======================================
+    const productionCanvas = document.getElementById('productionChart');
 
-new Chart(document.getElementById('productionChart'), {
+    if (productionCanvas) {
 
-    type: 'bar',
+        new Chart(productionCanvas, {
 
-    data: {
+            type: 'bar',
 
-        labels: [
-            'POTONG',
-            'SE',
-            'DE',
-            'WATERJET',
-            'TEMP'
-        ],
+            data: {
 
-        datasets: [{
+                labels: [
+                    'POTONG',
+                    'SE',
+                    'DE',
+                    'WATERJET',
+                    'TEMP'
+                ],
 
-            label: 'Pencapaian Produksi',
+                datasets: [{
 
-            data: [92.5, 79.4, 86.3, 82.1, 95.2],
+                    label: 'Pencapaian Produksi',
 
-            backgroundColor: '#0866c6',
+                    data: [92.5, 79.4, 86.3, 82.1, 95.2],
 
-            borderRadius: 3,
+                    backgroundColor: '#0866c6',
 
-            barPercentage: 0.58
+                    borderRadius: 4,
 
-        }]
+                    barPercentage: 0.58
 
-    },
+                }]
 
-    options: {
+            },
 
-        responsive: true,
+            options: {
 
-        maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
 
-        plugins: {
+                plugins: {
 
-            legend: {
-                display: false
-            }
-
-        },
-
-        scales: {
-
-            y: {
-
-                min: 0,
-
-                max: 100,
-
-                ticks: {
-
-                    callback: function(value) {
-                        return value + '%';
+                    legend: {
+                        display: false
                     }
 
                 },
 
-                grid: {
-                    color: '#dfe8f6',
-                    borderDash: [3, 3]
-                }
+                scales: {
 
-            },
+                    y: {
 
-            x: {
+                        min: 0,
+                        max: 100,
 
-                grid: {
-                    display: false
+                        ticks: {
+
+                            callback: function (value) {
+                                return value + '%';
+                            }
+
+                        },
+
+                        grid: {
+                            color: '#e6edf6',
+                            borderDash: [3, 3]
+                        }
+
+                    },
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        }
+
+                    }
+
                 }
 
             }
 
-        }
+        });
 
     }
 
-});
 
+    // ======================================
+    // GRAFIK REJECT MESIN
+    // ======================================
 
-// ======================================
-// GRAFIK REJECT MESIN
-// ======================================
+    const rejectCanvas = document.getElementById('rejectChart');
 
-new Chart(document.getElementById('rejectChart'), {
+    if (rejectCanvas) {
 
-    type: 'bar',
+        new Chart(rejectCanvas, {
 
-    data: {
+            type: 'bar',
 
-        labels: [
-            'POTONG',
-            'SE',
-            'DE',
-            'WATERJET',
-            'TEMP'
-        ],
+            data: {
 
-        datasets: [{
+                labels: [
+                    'POTONG',
+                    'SE',
+                    'DE',
+                    'WATERJET',
+                    'TEMP'
+                ],
 
-            label: 'Persentase Reject',
+                datasets: [{
 
-            data: [0.3, 1.4, 1.5, 2.3, 0.7],
+                    label: 'Persentase Reject',
 
-            backgroundColor: [
-                '#07845e',
-                '#e58a00',
-                '#e58a00',
-                '#bd2020',
-                '#07845e'
-            ],
+                    data: [0.3, 1.4, 1.5, 2.3, 0.7],
 
-            borderRadius: 3,
+                    backgroundColor: [
+                        '#07845e',
+                        '#e58a00',
+                        '#e58a00',
+                        '#bd2020',
+                        '#07845e'
+                    ],
 
-            barPercentage: 0.58
+                    borderRadius: 4,
 
-        }]
+                    barPercentage: 0.58
 
-    },
+                }]
 
-    options: {
+            },
 
-        responsive: true,
+            options: {
 
-        maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
 
-        plugins: {
+                plugins: {
 
-            legend: {
-                display: false
-            }
-
-        },
-
-        scales: {
-
-            y: {
-
-                min: 0,
-
-                max: 3,
-
-                ticks: {
-
-                    callback: function(value) {
-                        return value + '%';
+                    legend: {
+                        display: false
                     }
 
                 },
 
-                grid: {
-                    color: '#dfe8f6',
-                    borderDash: [3, 3]
-                }
+                scales: {
 
-            },
+                    y: {
 
-            x: {
+                        min: 0,
+                        max: 3,
 
-                grid: {
-                    display: false
+                        ticks: {
+
+                            callback: function (value) {
+                                return value + '%';
+                            }
+
+                        },
+
+                        grid: {
+                            color: '#e6edf6',
+                            borderDash: [3, 3]
+                        }
+
+                    },
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        }
+
+                    }
+
                 }
 
             }
 
-        }
+        });
 
     }
 
-});
 
+    // ======================================
+    // FILTER HARI INI
+    // ======================================
 
-// ======================================
-// FILTER HARI INI
-// ======================================
+    const todayCheckbox = document.getElementById('todayOnly');
 
-const todayCheckbox = document.getElementById('todayOnly');
+    if (todayCheckbox) {
 
-todayCheckbox.addEventListener('change', function() {
+        todayCheckbox.addEventListener('change', function () {
 
-    if (this.checked) {
+            if (this.checked) {
 
-        const today = new Date();
+                const today = new Date();
 
-        const year = today.getFullYear();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
 
-        const month = String(today.getMonth() + 1).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
 
-        const day = String(today.getDate()).padStart(2, '0');
+                document.getElementById('tanggalAwal').value = formattedDate;
+                document.getElementById('tanggalAkhir').value = formattedDate;
 
-        const formattedDate = `${year}-${month}-${day}`;
+            }
 
-        document.getElementById('tanggalAwal').value = formattedDate;
-
-        document.getElementById('tanggalAkhir').value = formattedDate;
+        });
 
     }
 
@@ -1444,7 +806,6 @@ function exportExcel() {
     );
 
 }
-
 </script>
 
 
