@@ -3,62 +3,165 @@ $pageTitle = 'Dashboard Penjualan';
 $activePage = 'penjualan';
 $basePath = '../';
 
+require_once __DIR__ . '/../koneksi.php';
 require_once __DIR__ . '/../includes/header.php';
+$currentUser = 'Administrator';
+// ==========================================
+// FILTER PERIODE
+// ==========================================
+
+$startDate = $_GET['tanggal_awal'] ?? '2026-10-01';
+$endDate   = $_GET['tanggal_akhir'] ?? '2026-10-31';
 
 // ==========================================
-// DATA SEMENTARA (DUMMY)
-// Nantinya akan diganti dengan data MySQL
+// 1. DATA SALES ORDER
 // ==========================================
 
-$startDate = $_GET['tanggal_awal'] ?? '2026-09-01';
-$endDate   = $_GET['tanggal_akhir'] ?? '2026-09-21';
+$stmtSO = $conn->prepare("
+    SELECT
+        COUNT(*) AS total_so,
+        COALESCE(SUM(total_rp), 0) AS nominal_so
+    FROM report_so
+    WHERE inquiry_date BETWEEN :start_date AND :end_date
+");
 
-$currentUser = 'SARI';
-$userIp = $_SERVER['REMOTE_ADDR'] ?? '192.168.1.78';
-if ($userIp === '::1') {
-    $userIp = '127.0.0.1';
-}
+$stmtSO->execute([
+    ':start_date' => $startDate,
+    ':end_date' => $endDate
+]);
 
-// 1. Aktivitas Operasional
-$salesOrderItemCount = 25;
-$salesOrderNominal   = 9999999;
+$dataSO = $stmtSO->fetch();
 
-$workOrderItemCount  = 72;
-$workOrderNominal    = 9999999;
+$salesOrderItemCount = (int) $dataSO['total_so'];
+$salesOrderNominal = (float) $dataSO['nominal_so'];
 
-// 2. Monitoring Logistik
+// ==========================================
+// 2. DATA WORK ORDER
+// ==========================================
+
+$stmtWO = $conn->prepare("
+    SELECT COUNT(DISTINCT no_wo) AS total_wo
+    FROM report_alur_wo
+    WHERE tgl_trans_wo BETWEEN :start_date AND :end_date
+");
+
+$stmtWO->execute([
+    ':start_date' => $startDate,
+    ':end_date' => $endDate
+]);
+
+$workOrderItemCount = (int) $stmtWO->fetchColumn();
+
+// Nominal WO tidak tersedia pada laporan yang digunakan.
+$workOrderNominal = 0;
+
+// ==========================================
+// 3. DATA MONITORING LOGISTIK
+// ==========================================
+
+$stmtLogistik = $conn->prepare("
+    SELECT
+        COUNT(DISTINCT d.no_do) AS total_do,
+
+        COUNT(DISTINCT CASE
+            WHEN d.tgl_kirim IS NULL
+                OR CAST(d.tgl_kirim AS CHAR) LIKE '0000-00-00%'
+            THEN d.no_do
+        END) AS siap_dikirim,
+
+        COUNT(DISTINCT CASE
+            WHEN d.tgl_kirim IS NOT NULL
+                AND CAST(d.tgl_kirim AS CHAR) NOT LIKE '0000-00-00%'
+                AND (
+                    d.tgl_terima IS NULL
+                    OR CAST(d.tgl_terima AS CHAR) LIKE '0000-00-00%'
+                )
+            THEN d.no_do
+        END) AS proses_pengiriman,
+
+        COUNT(DISTINCT CASE
+            WHEN d.tgl_terima IS NOT NULL
+                AND CAST(d.tgl_terima AS CHAR) NOT LIKE '0000-00-00%'
+            THEN d.no_do
+        END) AS barang_diterima
+
+    FROM report_status_do d
+    INNER JOIN report_so s
+        ON TRIM(d.no_so) = TRIM(s.no_trans)
+
+    WHERE s.inquiry_date BETWEEN :start_date AND :end_date
+");
+
+$stmtLogistik->execute([
+    ':start_date' => $startDate,
+    ':end_date' => $endDate
+]);
+
+$logistik = $stmtLogistik->fetch();
+
 $logisticData = [
     [
         'label' => 'Siap Untuk Dikirim',
-        'value' => 7,
-        'percent' => 18.42,
+        'value' => (int) $logistik['siap_dikirim'],
+        'percent' => 0,
         'color' => '#7066e0'
     ],
     [
         'label' => 'Proses Pengiriman',
-        'value' => 12,
-        'percent' => 31.58,
+        'value' => (int) $logistik['proses_pengiriman'],
+        'percent' => 0,
         'color' => '#34d399'
     ],
     [
-        'label' => 'Invoice Terbit',
-        'value' => 19,
-        'percent' => 50.00,
+        'label' => 'Barang Diterima',
+        'value' => (int) $logistik['barang_diterima'],
+        'percent' => 0,
         'color' => '#ff8a7a'
     ]
 ];
 
 $logisticTotal = array_sum(array_column($logisticData, 'value'));
 
-// 3. Total Invoice per Periode (Data Harian 1-31)
-$invoicePeriodLabels = range(1, 31);
-$invoicePeriodData = [
-    0, 63, 22, 8, 68, 54, 28, 35, 78, 36,
-    58, 68, 28, 82, 18, 92, 90, 98, 62, 40,
-    72, 88, 82, 98, 40, 20, 68, 74, 82, 40, 92
-];
-?>
+foreach ($logisticData as &$item) {
+    $item['percent'] = $logisticTotal > 0
+        ? round(($item['value'] / $logisticTotal) * 100, 2)
+        : 0;
+}
 
+unset($item);
+
+// ==========================================
+// 4. DATA GRAFIK INVOICE
+// ==========================================
+
+$stmtInvoice = $conn->prepare("
+    SELECT
+        DAY(tgl_final) AS hari,
+        SUM(total_sudah_invoice) AS total_invoice
+    FROM report_invoice_per_so
+    WHERE tgl_final BETWEEN :start_date AND :end_date
+    GROUP BY DAY(tgl_final)
+    ORDER BY DAY(tgl_final)
+");
+
+$stmtInvoice->execute([
+    ':start_date' => $startDate,
+    ':end_date' => $endDate
+]);
+
+$invoiceRows = $stmtInvoice->fetchAll();
+
+$invoicePeriodLabels = range(1, 31);
+$invoicePeriodData = array_fill(0, 31, 0);
+
+foreach ($invoiceRows as $row) {
+    $hari = (int) $row['hari'];
+
+    if ($hari >= 1 && $hari <= 31) {
+        $invoicePeriodData[$hari - 1] = (float) $row['total_invoice'];
+    }
+}
+?>
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -781,10 +884,13 @@ $invoicePeriodData = [
             <div class="sales-operasional-container">
 
                 <!-- 1. Sales Order -->
-                <div class="s-metric-box">
+                <div class="s-metric-box"
+                style="cursor:pointer;"
+                onclick="window.location.href='Detail-SO.php?tanggal_awal=<?= urlencode($startDate) ?>&tanggal_akhir=<?= urlencode($endDate) ?>'">
                     <div class="s-box-top">
                         <h4 class="s-box-title">Sales Order</h4>
-                        <a href="#" class="s-circle-btn" title="Lihat Detail Sales Order">
+                        <a href="Detail-SO.php?tanggal_awal=<?= urlencode($startDate) ?>&tanggal_akhir=<?= urlencode($endDate) ?>"
+                    class="s-circle-btn" title="Lihat Detail Sales Order">
                             <i class="bi bi-arrow-up-right"></i>
                         </a>
                     </div>
@@ -801,10 +907,13 @@ $invoicePeriodData = [
                 </div>
 
                 <!-- 2. Work Order -->
-                <div class="s-metric-box">
+                <div class="s-metric-box"
+                style="cursor:pointer;"
+                onclick="window.location.href='Detail-WO.php?tanggal_awal=<?= urlencode($startDate) ?>&tanggal_akhir=<?= urlencode($endDate) ?>'">
                     <div class="s-box-top">
                         <h4 class="s-box-title">Work Order</h4>
-                        <a href="#" class="s-circle-btn" title="Lihat Detail Work Order">
+                        <a href="Detail-WO.php?tanggal_awal=<?= urlencode($startDate) ?>&tanggal_akhir=<?= urlencode($endDate) ?>"
+                        class="s-circle-btn" title="Lihat Detail Work Order">
                             <i class="bi bi-arrow-up-right"></i>
                         </a>
                     </div>
@@ -815,8 +924,8 @@ $invoicePeriodData = [
                     </div>
 
                     <div class="s-box-footer">
-                        <span>Total Nominal :</span>
-                        <strong>Rp <?= number_format($workOrderNominal, 0, ',', '.') ?>, 00</strong>
+                     <span>Total Work Order</span>
+                        <strong><?= number_format($workOrderItemCount, 0, ',', '.') ?> WO</strong>
                     </div>
                 </div>
 
@@ -824,26 +933,27 @@ $invoicePeriodData = [
         </div>
 
         <!-- Right: Monitoring Logistik -->
-        <div class="sales-sub-card">
-            <div class="sales-sub-header">
-                <h3 class="sales-sub-title">Monitoring Logistik</h3>
-            </div>
+<div class="sales-sub-card">
 
-            <div class="sales-pie-layout">
-                <div class="sales-pie-wrapper">
-                    <canvas id="logisticsPieChart"></canvas>
-                </div>
+    <div class="sales-sub-header">
+        <h3 class="sales-sub-title">Monitoring Logistik</h3>
+    </div>
 
-                <div class="sales-pie-legend">
-                    <?php foreach ($logisticData as $item): ?>
-                        <div class="sales-legend-item">
-                            <span class="sales-legend-dot" style="background: <?= $item['color'] ?>;"></span>
-                            <span><?= htmlspecialchars($item['label']) ?></span>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
+    <div class="sales-pie-layout">
+        <div class="sales-pie-wrapper">
+            <canvas id="logisticsPieChart"></canvas>
         </div>
+
+        <div class="sales-pie-legend">
+            <?php foreach ($logisticData as $item): ?>
+                <div class="sales-legend-item">
+                    <span class="sales-legend-dot" style="background: <?= $item['color'] ?>;"></span>
+                    <span><?= htmlspecialchars($item['label']) ?></span>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
 
     </section>
 
@@ -908,19 +1018,21 @@ new Chart(ctxInvoice, {
                 cornerRadius: 8,
                 callbacks: {
                     label: function(context) {
-                        return ' Total Invoice: ' + context.parsed.y;
+                        return ' Total Invoice: Rp ' +
+                        new Intl.NumberFormat('id-ID').format(context.parsed.y);
                     }
                 }
             }
         },
         scales: {
             y: {
-                min: 0,
-                max: 100,
-                ticks: {
-                    stepSize: 20,
-                    font: { size: 10 }
-                },
+            beginAtZero: true,
+            ticks: {
+        font: { size: 10 },
+        callback: function(value) {
+            return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+        }
+    },
                 grid: {
                     color: '#e2e8f0',
                     borderDash: [3, 3],
@@ -963,9 +1075,25 @@ new Chart(ctxLogistics, {
         }]
     },
     options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
+    responsive: true,
+    maintainAspectRatio: false,
+
+    onClick: function(event, elements) {
+        if (elements.length > 0) {
+            const index = elements[0].index;
+            const selectedStatus = logisticData[index].label;
+
+            const params = new URLSearchParams({
+                tanggal_awal: '<?= htmlspecialchars($startDate) ?>',
+                tanggal_akhir: '<?= htmlspecialchars($endDate) ?>',
+                status: selectedStatus
+            });
+
+            window.location.href = 'Detail-Logistik.php?' + params.toString();
+        }
+    },
+
+    plugins: {
             legend: {
                 display: false
             },
