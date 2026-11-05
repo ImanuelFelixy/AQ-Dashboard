@@ -352,20 +352,19 @@ async function openWODetail(kategori) {
 |--------------------------------------------------------------------------
 */
 
+
 function renderWOTable(data) {
 
     const container = document.getElementById('woModalTableContainer');
 
-    // Simpan seluruh data WO
     const allData = data;
-
-    // Kolom yang ditampilkan pada tabel
     const columns = Object.keys(data[0]);
 
-    // Buat area search dan tabel
     container.innerHTML = `
-        <div class="wo-search-wrapper">
-            <div class="wo-search-box">
+        <div class="pb-modal-search wo-search-wrapper">
+
+            <div class="pb-search-input">
+
                 <i class="bi bi-search"></i>
 
                 <input
@@ -375,24 +374,39 @@ function renderWOTable(data) {
                     autocomplete="off"
                 >
 
-                <button
-                    type="button"
-                    id="woSearchClear"
-                    title="Hapus pencarian"
-                >
-                    <i class="bi bi-x-lg"></i>
-                </button>
             </div>
+
+            <button
+                type="button"
+                class="pb-search-button"
+                id="woSearchButton"
+            >
+                Cari
+            </button>
+
+            <button
+                type="button"
+                class="pb-search-reset"
+                id="woSearchReset"
+            >
+                Reset
+            </button>
+
         </div>
 
         <div id="woSearchTable"></div>
     `;
 
     const searchInput = document.getElementById('woSearchInput');
-    const clearButton = document.getElementById('woSearchClear');
+    const searchButton = document.getElementById('woSearchButton');
+    const resetButton = document.getElementById('woSearchReset');
     const tableContainer = document.getElementById('woSearchTable');
 
-    // Fungsi untuk membuat tabel
+
+    // ======================================
+    // MEMBUAT TABEL
+    // ======================================
+
     function createTable(rows) {
 
         if (rows.length === 0) {
@@ -412,6 +426,7 @@ function renderWOTable(data) {
 
         let html = `
             <table class="wo-detail-table">
+
                 <thead>
                     <tr>
         `;
@@ -427,11 +442,13 @@ function renderWOTable(data) {
             }
 
             html += `<th>${escapeWOHTML(label)}</th>`;
+
         });
 
         html += `
                     </tr>
                 </thead>
+
                 <tbody>
         `;
 
@@ -462,11 +479,13 @@ function renderWOTable(data) {
                     html += `
                         <td>${escapeWOHTML(value)}</td>
                     `;
+
                 }
 
             });
 
             html += '</tr>';
+
         });
 
         html += `
@@ -475,12 +494,19 @@ function renderWOTable(data) {
         `;
 
         tableContainer.innerHTML = html;
+
     }
 
-    // Fungsi pencarian hanya pada tiga kolom
-    function filterWO(keyword) {
 
-        const searchValue = keyword.toLowerCase().trim();
+    // ======================================
+    // FUNGSI PENCARIAN
+    // ======================================
+
+    function filterWO() {
+
+        const keyword = searchInput.value
+            .toLowerCase()
+            .trim();
 
         const filteredData = allData.filter(row => {
 
@@ -489,43 +515,60 @@ function renderWOTable(data) {
             const pelanggan = String(row.pelanggan ?? '').toLowerCase();
 
             return (
-                noWO.includes(searchValue) ||
-                noSO.includes(searchValue) ||
-                pelanggan.includes(searchValue)
+                noWO.includes(keyword) ||
+                noSO.includes(keyword) ||
+                pelanggan.includes(keyword)
             );
 
         });
 
         createTable(filteredData);
 
-        // Perbarui informasi jumlah data
         document.getElementById('woModalInfo').textContent =
             'Menampilkan ' +
             filteredData.length.toLocaleString('id-ID') +
             ' dari ' +
             allData.length.toLocaleString('id-ID') +
             ' Work Order';
+
     }
 
-    // Jalankan pencarian saat mengetik
-    searchInput.addEventListener('input', function() {
-        filterWO(this.value);
+
+    // Tombol Cari
+    searchButton.addEventListener('click', filterWO);
+
+
+    // Enter untuk mencari
+    searchInput.addEventListener('keydown', function(event) {
+
+        if (event.key === 'Enter') {
+
+            event.preventDefault();
+
+            filterWO();
+
+        }
+
     });
 
-    // Hapus pencarian
-    clearButton.addEventListener('click', function() {
+
+    // Tombol Reset
+    resetButton.addEventListener('click', function() {
 
         searchInput.value = '';
 
-        filterWO('');
+        filterWO();
 
         searchInput.focus();
 
     });
 
+
     // Tampilkan seluruh data pertama kali
     createTable(allData);
+
 }
+
 
 
 /*

@@ -434,10 +434,14 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
 
 <!-- ==================================================
-     POPUP CARD 1
+     POPUP CARD 
 ================================================== -->
 
-<?php require_once __DIR__ . '/POPCARD1.php'; ?>
+<?php
+require_once __DIR__ . '/POPCARD1.php';
+require_once __DIR__ . '/POPCARD2.php';
+?>
+
 
 
 <!-- ==================================================
@@ -558,12 +562,13 @@ document.addEventListener('DOMContentLoaded', function () {
         openWODetail
     );
 
-    // Card 2: belum memiliki popup
+    // Card 2: klik irisan membuka popup detail PB-SB
     createDonutChart(
         'pbChart',
         pbLabels,
         pbValues,
-        pbColors
+        pbColors,
+        openPBDetail
     );
 
 
