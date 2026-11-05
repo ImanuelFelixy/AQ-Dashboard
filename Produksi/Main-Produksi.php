@@ -3,64 +3,14 @@ $pageTitle = 'Dashboard Produksi';
 $activePage = 'produksi';
 $basePath = '../';
 
-require_once '../includes/header.php';
-
-/*
-|--------------------------------------------------------------------------
-| DATA SEMENTARA (DUMMY)
-|--------------------------------------------------------------------------
-| Nantinya bagian ini akan dipindahkan ke data-produksi.php
-| dan diganti dengan data dari database MySQL.
-|--------------------------------------------------------------------------
-*/
-
-// Data Work Order
-$woTotal = 125;
-
-$woData = [
-    [
-        'label' => 'Reguler',
-        'value' => 85,
-        'color' => '#0875d1'
-    ],
-    [
-        'label' => 'Prioritas',
-        'value' => 28,
-        'color' => '#f59e0b'
-    ],
-    [
-        'label' => 'Reject (Rework)',
-        'value' => 12,
-        'color' => '#dc2626'
-    ]
-];
-
-// Data Permintaan dan Penyerahan Bahan
-$pbTotal = 120;
-
-$pbData = [
-    [
-        'label' => 'Sudah Seluruhnya',
-        'value' => 80,
-        'color' => '#07845e'
-    ],
-    [
-        'label' => 'Parsial / Sebagian',
-        'value' => 25,
-        'color' => '#0891b2'
-    ],
-    [
-        'label' => 'Belum Diserahkan',
-        'value' => 15,
-        'color' => '#dc2626'
-    ]
-];
+require_once __DIR__ . '/data-produksi.php';
+require_once __DIR__ . '/../includes/header.php';
 
 // Filter tanggal
 $startDate = $_GET['tanggal_awal'] ?? date('Y-m-01');
 $endDate = $_GET['tanggal_akhir'] ?? date('Y-m-d');
 
-// Pastikan format tanggal valid
+// Validasi format tanggal
 if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate)) {
     $startDate = date('Y-m-01');
 }
@@ -73,7 +23,7 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- CSS khusus Dashboard Produksi -->
+<!-- CSS Dashboard Produksi -->
 <link rel="stylesheet" href="prod.css">
 
 <main class="production-dashboard">
@@ -85,15 +35,15 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
     <section class="production-heading">
 
         <div class="production-heading-info">
-
             <div class="production-title">
+
                 <div class="heading-icon">
                     <i class="bi bi-clipboard2-data-fill"></i>
                 </div>
 
                 <h1>Dashboard Laporan Produksi — AQUAMATE</h1>
-            </div>
 
+            </div>
         </div>
 
         <div class="production-actions">
@@ -193,10 +143,9 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
     <section class="production-grid">
 
-
-        <!-- ==================================================
+        <!-- ==============================================
              1. WO BELUM DIOPTIMASI
-        =================================================== -->
+        =============================================== -->
 
         <div class="production-card production-summary-card blue-outline">
 
@@ -215,7 +164,6 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
             </div>
 
-
             <div class="production-donut-content">
 
                 <div class="production-donut-wrap">
@@ -223,14 +171,16 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
                     <canvas id="woChart"></canvas>
 
                     <div class="production-donut-center">
+
                         <strong>
                             <?= number_format($woTotal, 0, ',', '.') ?>
                         </strong>
+
                         <span>WO</span>
+
                     </div>
 
                 </div>
-
 
                 <div class="production-legend">
 
@@ -272,9 +222,9 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
         </div>
 
 
-        <!-- ==================================================
+        <!-- ==============================================
              2. PERMINTAAN DAN PENYERAHAN BAHAN
-        =================================================== -->
+        =============================================== -->
 
         <div class="production-card production-summary-card green-outline">
 
@@ -293,7 +243,6 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
             </div>
 
-
             <div class="production-donut-content">
 
                 <div class="production-donut-wrap">
@@ -301,14 +250,16 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
                     <canvas id="pbChart"></canvas>
 
                     <div class="production-donut-center">
+
                         <strong>
                             <?= number_format($pbTotal, 0, ',', '.') ?>
                         </strong>
+
                         <span>PB</span>
+
                     </div>
 
                 </div>
-
 
                 <div class="production-legend">
 
@@ -350,9 +301,9 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
         </div>
 
 
-        <!-- ==================================================
+        <!-- ==============================================
              3. RASIO PENGGUNAAN BAHAN
-        =================================================== -->
+        =============================================== -->
 
         <div class="production-card production-ratio-card orange-outline">
 
@@ -368,7 +319,6 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
                 </span>
 
             </div>
-
 
             <div class="production-ratio-content">
 
@@ -395,7 +345,6 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
             </div>
 
-
             <div class="production-ratio-detail">
 
                 <div>
@@ -418,9 +367,9 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
         </div>
 
 
-        <!-- ==================================================
+        <!-- ==============================================
              4. GRAFIK PENCAPAIAN PRODUKSI
-        =================================================== -->
+        =============================================== -->
 
         <div class="production-card production-chart-card">
 
@@ -442,19 +391,16 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
             </div>
 
-
             <div class="production-chart-container">
-
                 <canvas id="productionChart"></canvas>
-
             </div>
 
         </div>
 
 
-        <!-- ==================================================
+        <!-- ==============================================
              5. GRAFIK REJECT MESIN
-        =================================================== -->
+        =============================================== -->
 
         <div class="production-card production-chart-card">
 
@@ -476,19 +422,22 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
             </div>
 
-
             <div class="production-chart-container">
-
                 <canvas id="rejectChart"></canvas>
-
             </div>
 
         </div>
 
-
     </section>
 
 </main>
+
+
+<!-- ==================================================
+     POPUP CARD 1
+================================================== -->
+
+<?php require_once __DIR__ . '/POPCARD1.php'; ?>
 
 
 <!-- ==================================================
@@ -499,14 +448,16 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 document.addEventListener('DOMContentLoaded', function () {
 
     // ======================================
-    // DATA DUMMY DARI PHP
+    // DATA DARI PHP
     // ======================================
 
     const woValues = <?= json_encode(array_column($woData, 'value')) ?>;
     const woColors = <?= json_encode(array_column($woData, 'color')) ?>;
+    const woLabels = <?= json_encode(array_column($woData, 'label')) ?>;
 
     const pbValues = <?= json_encode(array_column($pbData, 'value')) ?>;
     const pbColors = <?= json_encode(array_column($pbData, 'color')) ?>;
+    const pbLabels = <?= json_encode(array_column($pbData, 'label')) ?>;
 
 
     // ======================================
@@ -521,8 +472,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // ======================================
     // FUNGSI DONUT CHART
     // ======================================
+    // onSliceClick hanya dijalankan jika
+    // callback diberikan pada chart tersebut.
+    // Jadi PB tidak membuka popup WO.
 
-    function createDonutChart(elementId, values, colors) {
+    function createDonutChart(
+        elementId,
+        labels,
+        values,
+        colors,
+        onSliceClick = null
+    ) {
 
         const canvas = document.getElementById(elementId);
 
@@ -530,21 +490,19 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        new Chart(canvas, {
+        return new Chart(canvas, {
 
             type: 'doughnut',
 
             data: {
+                labels: labels,
 
                 datasets: [{
-
                     data: values,
                     backgroundColor: colors,
                     borderWidth: 0,
-                    hoverOffset: 5
-
+                    hoverOffset: 7
                 }]
-
             },
 
             options: {
@@ -552,6 +510,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '72%',
+
+                onClick: function (event, elements, chart) {
+
+                    if (
+                        elements.length > 0 &&
+                        typeof onSliceClick === 'function'
+                    ) {
+
+                        const index = elements[0].index;
+                        const kategori = chart.data.labels[index];
+
+                        onSliceClick(kategori);
+                    }
+
+                },
 
                 plugins: {
 
@@ -572,9 +545,26 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    // Jalankan donut chart
-    createDonutChart('woChart', woValues, woColors);
-    createDonutChart('pbChart', pbValues, pbColors);
+    // ======================================
+    // JALANKAN DONUT CHART
+    // ======================================
+
+    // Card 1: klik irisan membuka popup detail WO
+    createDonutChart(
+        'woChart',
+        woLabels,
+        woValues,
+        woColors,
+        openWODetail
+    );
+
+    // Card 2: belum memiliki popup
+    createDonutChart(
+        'pbChart',
+        pbLabels,
+        pbValues,
+        pbColors
+    );
 
 
     // ======================================
@@ -785,6 +775,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 document.getElementById('tanggalAwal').value = formattedDate;
                 document.getElementById('tanggalAkhir').value = formattedDate;
+                document.getElementById('tanggalAwal').form.submit();
 
             }
 
@@ -810,5 +801,5 @@ function exportExcel() {
 
 
 <?php
-require_once '../includes/footer.php';
+require_once __DIR__ . '/../includes/footer.php';
 ?>
