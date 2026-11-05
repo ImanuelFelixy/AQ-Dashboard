@@ -160,31 +160,95 @@ $woData = [
     ]
 ];
 
-/*
-|--------------------------------------------------------------------------
-| 5. DATA PB DAN PENYERAHAN BAHAN (DUMMY)
-|--------------------------------------------------------------------------
-| Sementara tetap menggunakan data dummy.
-| Nanti akan dihubungkan dengan database.
-|--------------------------------------------------------------------------
-*/
+// ==================================================
+// PERMINTAAN DAN PENYERAHAN BAHAN
+// ==================================================
 
-$pbTotal = 120;
+$sqlPB = "
+    SELECT
+        pb.no_pb,
+        pb.tgl_trans,
+        pb.jumlah_pb,
+        COALESCE(SUM(sb.keluar), 0) AS jumlah_keluar,
+        GREATEST(
+            pb.jumlah_pb - COALESCE(SUM(sb.keluar), 0),
+            0
+        ) AS sisa,
+        CASE
+            WHEN COALESCE(SUM(sb.keluar), 0) = 0
+                THEN 'Belum Diserahkan'
+            WHEN COALESCE(SUM(sb.keluar), 0) < pb.jumlah_pb
+                THEN 'Parsial / Sebagian'
+            ELSE 'Sudah Seluruhnya'
+        END AS status_pb,
+        GROUP_CONCAT(
+            DISTINCT mb.nama_barang
+            ORDER BY mb.nama_barang
+            SEPARATOR ', '
+        ) AS nama_barang
+    FROM permintaan_bahan pb
+    LEFT JOIN serah_barang sb
+        ON sb.no_pb = pb.no_pb
+    LEFT JOIN master_barang mb
+        ON mb.id_barang = sb.id_barang
+    WHERE DATE(pb.tgl_trans) BETWEEN :tanggal_awal AND :tanggal_akhir
+    GROUP BY
+        pb.no_pb,
+        pb.tgl_trans,
+        pb.jumlah_pb;
+    ";
+
+    $stmtPB = $conn->prepare($sqlPB);
+
+    $stmtPB->execute([
+        ':tanggal_awal' => $startDate,
+        ':tanggal_akhir' => $endDate
+]);
+
+$hasilPB = $stmtPB->fetchAll(PDO::FETCH_ASSOC);
+
+
+// ==================================================
+// REKAP STATUS PB
+// ==================================================
+
+$pbKategori = [
+    'Sudah Seluruhnya' => 0,
+    'Parsial / Sebagian' => 0,
+    'Belum Diserahkan' => 0
+];
+
+foreach ($hasilPB as $row) {
+
+    $status = $row['status_pb'];
+
+    if (isset($pbKategori[$status])) {
+        $pbKategori[$status]++;
+    }
+
+}
+
+$pbTotal = count($hasilPB);
+
+
+// ==================================================
+// DATA DONUT CHART PB
+// ==================================================
 
 $pbData = [
     [
         'label' => 'Sudah Seluruhnya',
-        'value' => 80,
+        'value' => $pbKategori['Sudah Seluruhnya'],
         'color' => '#07845e'
     ],
     [
         'label' => 'Parsial / Sebagian',
-        'value' => 25,
+        'value' => $pbKategori['Parsial / Sebagian'],
         'color' => '#0891b2'
     ],
     [
         'label' => 'Belum Diserahkan',
-        'value' => 15,
+        'value' => $pbKategori['Belum Diserahkan'],
         'color' => '#dc2626'
     ]
 ];
