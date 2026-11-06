@@ -332,4 +332,127 @@ $rasio = ($luasPotong > 0)
 $statusRasio = ($luasPotong > 0 && $rasio <= 1.20)
     ? 'Efisien'
     : 'Tidak Efisien';
+
+
+/*
+|--------------------------------------------------------------------------
+| 7. GRAFIK REJECT & PENCAPAIAN PER MESIN
+|--------------------------------------------------------------------------
+| Sumber : tabel produksi (tgl_update = tanggal produksi sebenarnya)
+|          dan kapasitas-mesin.php (kapasitas diisi manual, DB tidak diubah)
+|
+| Reject %      = reject / (OK + reject) x 100
+| Pencapaian %  = m2 OK / (kapasitas harian x hari kerja) x 100
+|--------------------------------------------------------------------------
+*/
+
+// Mesin yang tampil di grafik: nama_mesin di database => label di dashboard
+const MESIN_GRAFIK = [
+    'CUT'  => 'POTONG',
+    'SE'   => 'SE',
+    'DE'   => 'DE',
+    'JET'  => 'WATERJET',
+    'TEMP' => 'TEMP',
+];
+
+// Dasar hitung reject: 'QTY' (jumlah pcs) atau 'M2' (luas kaca)
+const REJECT_DASAR = 'QTY';
+
+// Jumlah hari kerja (Senin-Sabtu) pada periode
+function hitungHariKerja(string $awal, string $akhir): int
+{
+    $n = 0;
+    $d = new DateTime($awal);
+    $end = new DateTime($akhir);
+    while ($d <= $end) {
+        if ($d->format('N') !== '7') {   // 7 = Minggu
+            $n++;
+        }
+        $d->modify('+1 day');
+    }
+    return $n;
+}
+
+// Warna batang reject: < 1% hijau, 1 s/d < 2% oranye, >= 2% merah
+function warnaRejectMesin(float $persen): string
+{
+    if ($persen < 1) return '#07845e';
+    if ($persen < 2) return '#e58a00';
+    return '#bd2020';
+}
+
+function rataRataGrafik(array $nilai): float
+{
+    $v = array_filter($nilai, fn($x) => $x !== null);
+    return $v ? round(array_sum($v) / count($v), 1) : 0.0;
+}
+
+$mesinKode  = array_keys(MESIN_GRAFIK);
+$mesinLabel = array_values(MESIN_GRAFIK);
+$hariKerja  = hitungHariKerja($startDate, $endDate);
+
+// --- Data produksi per mesin dalam periode ---
+if (REJECT_DASAR === 'M2') {
+    $kolomOk = 'm2_ok';
+    $kolomRj = 'm2_rjk';
+} else {
+    $kolomOk = 'qty';
+    $kolomRj = 'qty_reject';
+}
+
+$placeholder = implode(',', array_fill(0, count($mesinKode), '?'));
+
+$stmtMesin = $conn->prepare("
+    SELECT
+        UPPER(TRIM(nama_mesin))        AS mesin,
+        SUM(COALESCE($kolomOk, 0))     AS total_ok,
+        SUM(COALESCE($kolomRj, 0))     AS total_reject,
+        SUM(COALESCE(m2_ok, 0))        AS total_m2
+    FROM produksi
+    WHERE tgl_update BETWEEN ? AND ?
+      AND UPPER(TRIM(nama_mesin)) IN ($placeholder)
+    GROUP BY UPPER(TRIM(nama_mesin))
+");
+$stmtMesin->execute(array_merge([$startDate, $endDate], $mesinKode));
+$produksiMesin = [];
+foreach ($stmtMesin->fetchAll(PDO::FETCH_ASSOC) as $r) {
+    $produksiMesin[$r['mesin']] = $r;
+}
+
+// --- Reject per mesin ---
+$rejectNilai = [];   // null = mesin tidak ada aktivitas pada periode
+foreach ($mesinKode as $kode) {
+    $r = $produksiMesin[$kode] ?? null;
+    $total = $r ? (float)$r['total_ok'] + (float)$r['total_reject'] : 0;
+    $rejectNilai[] = $total > 0 ? round((float)$r['total_reject'] * 100 / $total, 2) : null;
+}
+$rejectValues = array_map(fn($v) => $v ?? 0.0, $rejectNilai);
+$rejectColors = array_map('warnaRejectMesin', $rejectValues);
+$rejectAvg    = rataRataGrafik($rejectNilai);
+$rejectMax    = max(3, ceil(max($rejectValues ?: [0]) + 0.5));
+
+// --- Pencapaian per mesin (kapasitas dari file kapasitas-mesin.php) ---
+$kapasitas = is_file(__DIR__ . '/kapasitas-mesin.php')
+    ? (require __DIR__ . '/kapasitas-mesin.php')
+    : [];
+$kapasitasPerkiraan = false;
+$pencapaianSiap = false;
+
+$pencapaianNilai = [];
+foreach ($mesinKode as $kode) {
+    $kap = (float)($kapasitas[$kode]['kapasitas'] ?? 0);
+    if ($kap > 0 && $hariKerja > 0) {
+        $pencapaianSiap = true;
+        if (($kapasitas[$kode]['sumber'] ?? '') !== 'RESMI') {
+            $kapasitasPerkiraan = true;
+        }
+        $m2 = (float)($produksiMesin[$kode]['total_m2'] ?? 0);
+        $pencapaianNilai[] = round($m2 * 100 / ($kap * $hariKerja), 1);
+    } else {
+        $pencapaianNilai[] = null;     // kapasitas belum diisi
+    }
+}
+$pencapaianValues = array_map(fn($v) => $v ?? 0.0, $pencapaianNilai);
+$pencapaianAvg    = rataRataGrafik($pencapaianNilai);
+$pencapaianMax    = max(100, ceil(max($pencapaianValues ?: [0]) / 10) * 10);
 ?>

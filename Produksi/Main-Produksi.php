@@ -396,7 +396,7 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
                 </h3>
 
                 <span class="production-average">
-                    Rata-rata: 87.8%
+                    Rata-rata: <?= number_format($pencapaianAvg, 1, ',', '.') ?>%
                 </span>
 
             </div>
@@ -404,6 +404,17 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
             <div class="production-chart-container">
                 <canvas id="productionChart"></canvas>
             </div>
+
+            <?php if (!$pencapaianSiap): ?>
+                <div style="margin-top:10px;font-size:12px;color:#8a6d00;">
+                    Kapasitas mesin belum diisi (file kapasitas-mesin.php).
+                </div>
+            <?php elseif ($kapasitasPerkiraan): ?>
+                <div style="margin-top:10px;font-size:12px;color:#8a6d00;">
+                    Kapasitas masih perkiraan (puncak harian historis), bukan kapasitas resmi.
+                    Dihitung atas <?= (int)$hariKerja ?> hari kerja (Senin–Sabtu).
+                </div>
+            <?php endif; ?>
 
         </div>
 
@@ -427,7 +438,7 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
                 </h3>
 
                 <span class="production-average danger">
-                    Rata-rata: 2.0%
+                    Rata-rata: <?= number_format($rejectAvg, 1, ',', '.') ?>%
                 </span>
 
             </div>
@@ -450,6 +461,8 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 <?php
 require_once __DIR__ . '/POPCARD1.php';
 require_once __DIR__ . '/POPCARD2.php';
+require_once __DIR__ . '/PopCard4.php';
+require_once __DIR__ . '/PopCard5.php';
 ?>
 
 
@@ -464,6 +477,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // ======================================
     // DATA DARI PHP
     // ======================================
+
+    // Kode mesin di database, urutannya sama dengan label grafik (dipakai popup klik bar)
+    const mesinKode  = <?= json_encode($mesinKode) ?>;
+    const mesinLabel = <?= json_encode($mesinLabel) ?>;
 
     const woValues = <?= json_encode(array_column($woData, 'value')) ?>;
     const woColors = <?= json_encode(array_column($woData, 'color')) ?>;
@@ -596,19 +613,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             data: {
 
-                labels: [
-                    'POTONG',
-                    'SE',
-                    'DE',
-                    'WATERJET',
-                    'TEMP'
-                ],
+                labels: <?= json_encode($mesinLabel) ?>,
 
                 datasets: [{
 
                     label: 'Pencapaian Produksi',
 
-                    data: [92.5, 79.4, 86.3, 82.1, 95.2],
+                    data: <?= json_encode($pencapaianValues) ?>,
 
                     backgroundColor: '#0866c6',
 
@@ -625,10 +636,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 responsive: true,
                 maintainAspectRatio: false,
 
+                // Klik di mana saja pada kolom mesin (termasuk bar bernilai 0)
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+
+                onClick: function (event, elements) {
+
+                    if (elements.length > 0) {
+
+                        const i = elements[0].index;
+
+                        openCPDetail(mesinKode[i], mesinLabel[i]);
+                    }
+
+                },
+
+                onHover: function (event, elements) {
+
+                    event.native.target.style.cursor =
+                        elements.length > 0 ? 'pointer' : 'default';
+
+                },
+
                 plugins: {
 
                     legend: {
                         display: false
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                return ctx.parsed.y + '%';
+                            }
+                        }
                     }
 
                 },
@@ -638,7 +681,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     y: {
 
                         min: 0,
-                        max: 100,
+                        max: <?= (int)$pencapaianMax ?>,
 
                         ticks: {
 
@@ -686,27 +729,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             data: {
 
-                labels: [
-                    'POTONG',
-                    'SE',
-                    'DE',
-                    'WATERJET',
-                    'TEMP'
-                ],
+                labels: <?= json_encode($mesinLabel) ?>,
 
                 datasets: [{
 
                     label: 'Persentase Reject',
 
-                    data: [0.3, 1.4, 1.5, 2.3, 0.7],
+                    data: <?= json_encode($rejectValues) ?>,
 
-                    backgroundColor: [
-                        '#07845e',
-                        '#e58a00',
-                        '#e58a00',
-                        '#bd2020',
-                        '#07845e'
-                    ],
+                    backgroundColor: <?= json_encode($rejectColors) ?>,
 
                     borderRadius: 4,
 
@@ -721,10 +752,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 responsive: true,
                 maintainAspectRatio: false,
 
+                // Klik di mana saja pada kolom mesin (termasuk bar bernilai 0)
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+
+                onClick: function (event, elements) {
+
+                    if (elements.length > 0) {
+
+                        const i = elements[0].index;
+
+                        openRJDetail(mesinKode[i], mesinLabel[i]);
+                    }
+
+                },
+
+                onHover: function (event, elements) {
+
+                    event.native.target.style.cursor =
+                        elements.length > 0 ? 'pointer' : 'default';
+
+                },
+
                 plugins: {
 
                     legend: {
                         display: false
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                return ctx.parsed.y + '%';
+                            }
+                        }
                     }
 
                 },
@@ -734,7 +797,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     y: {
 
                         min: 0,
-                        max: 3,
+                        max: <?= (int)$rejectMax ?>,
 
                         ticks: {
 
