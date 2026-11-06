@@ -649,6 +649,7 @@ function renderPBTable(data) {
                 <tr>
                     <th>No.</th>
                     <th>No. PB</th>
+                    <th>Tanggal Transaksi</th>
                     <th>Nama Barang</th>
                     <th>Jumlah PB</th>
                     <th>Jumlah Keluar</th>
@@ -663,6 +664,15 @@ function renderPBTable(data) {
     `;
 
     data.forEach((row, index) => {
+
+        const tanggalTransaksi = row.tgl_trans
+            ? new Date(row.tgl_trans + 'T00:00:00')
+                .toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                })
+            : '-';
 
         const jumlahPB = Number(row.jumlah_pb) || 0;
 
@@ -680,6 +690,10 @@ function renderPBTable(data) {
                     <strong class="pb-number">
                         ${escapePBHTML(row.no_pb)}
                     </strong>
+                </td>
+
+                <td>
+                    ${escapePBHTML(tanggalTransaksi)}
                 </td>
 
                 <td class="pb-item-name">
@@ -878,6 +892,15 @@ function renderSBTable(data) {
 
     data.forEach((row, index) => {
 
+        const tanggalTransaksi = row.tgl_trans
+            ? new Date(row.tgl_trans + 'T00:00:00')
+                .toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                })
+            : '-';
+
         const keluar = Number(row.keluar) || 0;
 
         totalKeluar += keluar;
@@ -894,7 +917,9 @@ function renderSBTable(data) {
                     </strong>
                 </td>
 
-                <td>${escapePBHTML(row.tgl_trans || '-')}</td>
+                <td>
+                    ${escapePBHTML(tanggalTransaksi)}
+                </td>
 
                 <td>${escapePBHTML(row.nama_barang || '-')}</td>
 
