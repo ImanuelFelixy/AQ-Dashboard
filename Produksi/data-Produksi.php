@@ -252,4 +252,84 @@ $pbData = [
         'color' => '#dc2626'
     ]
 ];
+
+/* =========================================================
+   RASIO PENGGUNAAN BAHAN
+========================================================= */
+
+// 1. Menghitung luas bahan berdasarkan id_barang
+// Menggunakan tanggal transaksi bahan_potong.tgl_trans
+
+$sqlLuasBahan = "
+    SELECT
+        COALESCE(
+            SUM(
+                COALESCE(bp.total_keluar, 0) * COALESCE(mb.m2, 0)
+            ),
+            0
+        ) AS total_luas_bahan
+    FROM (
+        SELECT
+            id_barang,
+            SUM(COALESCE(keluar, 0)) AS total_keluar
+        FROM bahan_potong
+        WHERE DATE(tgl_trans) BETWEEN :tanggal_awal AND :tanggal_akhir
+        GROUP BY id_barang
+    ) bp
+    INNER JOIN master_barang mb
+        ON mb.id_barang = bp.id_barang
+    WHERE LOWER(mb.nama_barang) NOT LIKE '%kaca sisa%'
+";
+
+$stmtLuasBahan = $conn->prepare($sqlLuasBahan);
+
+$stmtLuasBahan->execute([
+    ':tanggal_awal' => $startDate,
+    ':tanggal_akhir' => $endDate
+]);
+
+$luasBahan = (float) $stmtLuasBahan->fetchColumn();
+
+
+// 2. Menghitung luas potong dari mesin CUT
+// Menggunakan tanggal produksi.tgl_update
+
+$sqlLuasPotong = "
+    SELECT
+        COALESCE(SUM(m2_ok), 0) AS total_luas_potong
+    FROM produksi
+    WHERE UPPER(TRIM(nama_mesin)) = 'CUT'
+      AND DATE(tgl_update) BETWEEN :tanggal_awal AND :tanggal_akhir
+";
+
+$stmtLuasPotong = $conn->prepare($sqlLuasPotong);
+
+$stmtLuasPotong->execute([
+    ':tanggal_awal' => $startDate,
+    ':tanggal_akhir' => $endDate
+]);
+
+$luasPotong = (float) $stmtLuasPotong->fetchColumn();
+
+
+// 3. Menghitung Offcut / Trim
+$offcut = $luasBahan - $luasPotong;
+
+
+// 4. Menghitung Yield
+$yield = ($luasBahan > 0)
+    ? ($luasPotong / $luasBahan) * 100
+    : 0;
+
+
+// 5. Menghitung Rasio Penggunaan Bahan
+$rasio = ($luasPotong > 0)
+    ? $luasBahan / $luasPotong
+    : 0;
+
+
+// 6. Menentukan status efisiensi
+$statusRasio = ($luasPotong > 0 && $rasio <= 1.20)
+    ? 'Efisien'
+    : 'Tidak Efisien';
 ?>

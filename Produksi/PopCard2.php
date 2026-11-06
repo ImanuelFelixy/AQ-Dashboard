@@ -144,7 +144,7 @@ if (isset($_GET['action'])) {
                         0
                     ) AS sisa,
 
-                    COALESCE(sb.nama_barang, '-') AS nama_barang,
+                    COALESCE(mb_pb.nama_barang, '-') AS nama_barang,
 
                     CASE
                         WHEN COALESCE(sb.total_keluar, 0) = 0
@@ -157,6 +157,9 @@ if (isset($_GET['action'])) {
                     END AS status_pb
 
                 FROM permintaan_bahan pb
+
+                LEFT JOIN master_barang mb_pb
+                    ON mb_pb.id_barang = pb.id_barang
 
                 LEFT JOIN (
                     SELECT
@@ -1092,14 +1095,19 @@ document.addEventListener('keydown', function(event) {
     z-index: 1;
     display: flex;
     flex-direction: column;
+
     width: 100%;
     max-width: 1250px;
+
+    height: 90vh;
     max-height: 90vh;
+    min-height: 0;
+
     background: #ffffff;
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+
     overflow: hidden;
-    animation: pbModalAppear 0.2s ease;
 }
 
 @keyframes pbModalAppear {
@@ -1263,13 +1271,26 @@ document.addEventListener('keydown', function(event) {
 
 .pb-modal-table-wrapper {
     position: relative;
-    min-height: 180px;
+
+    flex: 1 1 0;
+    min-height: 100px;
+
     overflow: auto;
 }
 
-.pb-modal-table-container,
-.pb-sb-detail-container {
+
+.pb-modal-table-container {
     width: 100%;
+    min-height: 0;
+    overflow: auto;
+}
+
+.pb-sb-detail-container {
+    flex: 1 1 auto;
+
+    min-height: 0;
+    max-height: 220px;
+
     overflow: auto;
 }
 
@@ -1363,9 +1384,16 @@ document.addEventListener('keydown', function(event) {
 /* DETAIL SB */
 
 .pb-sb-detail-section {
-    margin: 0 26px 18px;
+    flex: 0 1 auto;
+
+    max-height: 30vh;
+    min-height: 0;
+
+    margin: 0 26px 12px;
+
     border: 1px solid #dce8e2;
     border-radius: 10px;
+
     overflow: hidden;
     background: #ffffff;
 }

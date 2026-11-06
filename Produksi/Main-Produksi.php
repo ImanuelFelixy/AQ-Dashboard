@@ -308,7 +308,6 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
         <div class="production-card production-ratio-card orange-outline">
 
             <div class="production-card-heading">
-
                 <h3>
                     <i class="bi bi-calculator"></i>
                     RASIO PENGGUNAAN BAHAN
@@ -317,7 +316,6 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
                 <span class="production-target">
                     Target ≤ 1.20
                 </span>
-
             </div>
 
             <div class="production-ratio-content">
@@ -327,12 +325,18 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
                     <div class="production-ratio-main">
 
                         <span class="production-ratio-number">
-                            1.15
+                            <?= number_format($rasio, 2, ',', '.') ?>
                         </span>
 
                         <span class="production-efficiency">
-                            <i class="bi bi-check-circle"></i>
-                            Efisien (Yield 87.3%)
+                            <?php if ($statusRasio === 'Efisien'): ?>
+                                <i class="bi bi-check-circle"></i>
+                            <?php else: ?>
+                                <i class="bi bi-exclamation-circle"></i>
+                            <?php endif; ?>
+
+                            <?= htmlspecialchars($statusRasio) ?>
+                            (Yield <?= number_format($yield, 1, ',', '.') ?>%)
                         </span>
 
                     </div>
@@ -349,17 +353,23 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
                 <div>
                     <span>Jml Bahan:</span>
-                    <strong>15,450.5 m²</strong>
+                    <strong>
+                        <?= number_format($luasBahan, 2, ',', '.') ?> m²
+                    </strong>
                 </div>
 
                 <div>
                     <span>Jml Potong:</span>
-                    <strong>13,469.8 m²</strong>
+                    <strong>
+                        <?= number_format($luasPotong, 2, ',', '.') ?> m²
+                    </strong>
                 </div>
 
                 <div>
                     <span>Offcut/Trim:</span>
-                    <strong>1,963.1 m²</strong>
+                    <strong>
+                        <?= number_format($offcut, 2, ',', '.') ?> m²
+                    </strong>
                 </div>
 
             </div>

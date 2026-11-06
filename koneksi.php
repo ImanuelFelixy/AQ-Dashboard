@@ -6,7 +6,7 @@
 */
 
 $host     = 'localhost';
-$dbname   = 'aq_dashboard';
+$dbname   = 'dummy_aq';
 $username = 'root';
 $password = '';
 
