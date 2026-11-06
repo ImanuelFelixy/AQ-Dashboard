@@ -158,142 +158,410 @@ require_once __DIR__ . '/../includes/header.php';
 <style>
 .detail-container {
     padding: 30px;
+    background: #f4f7fc;
+    min-height: calc(100vh - 100px);
 }
 
 .detail-card {
-    background: white;
-    border-radius: 14px;
-    padding: 24px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(30, 64, 110, .05);
 }
 
+/* HEADER */
 .detail-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
 }
 
 .detail-header h2 {
-    font-size: 23px;
-    font-weight: 700;
-    color: #0965c5;
+    font-size: 25px;
+    font-weight: 800;
+    color: #17365d;
+    margin: 0 0 7px;
 }
 
 .detail-header p {
-    color: #64748b;
-    margin-top: 6px;
+    color: #8492a6;
+    font-size: 13px;
+    margin: 0;
 }
 
+.detail-header a {
+    display: inline-flex;
+    align-items: center;
+    background: #edf5ff;
+    color: #0866c6 !important;
+    padding: 10px 16px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.detail-header a:hover {
+    background: #dcecff;
+}
+
+/* FILTER */
 .filter-form {
     display: flex;
-    gap: 10px;
+    align-items: center;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    gap: 12px;
+    padding: 18px;
+    background: #f7faff;
+    border: 1px solid #e7eef8;
+    border-radius: 13px;
+    margin-bottom: 22px;
 }
 
 .filter-form input,
-.filter-form select,
-.filter-form button {
-    padding: 10px 14px;
-    border: 1px solid #ddd;
+.filter-form select {
+    height: 43px;
+    padding: 0 13px;
+    border: 1px solid #dce4ef;
     border-radius: 8px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 12px;
+    outline: none;
+}
+
+.filter-form input:focus,
+.filter-form select:focus {
+    border-color: #1680df;
+    box-shadow: 0 0 0 3px rgba(22,128,223,.10);
+}
+
+.filter-form input[type="text"] {
+    min-width: 220px;
+    flex: 1;
 }
 
 .filter-form button {
-    background: #0965c5;
-    color: white;
+    height: 43px;
+    padding: 0 22px;
     border: none;
+    border-radius: 8px;
+    background: #0866c6;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
     cursor: pointer;
+    transition: .2s;
 }
 
 .filter-form button:hover {
     background: #0754a5;
 }
 
+/* TOTAL DATA */
+.total-data {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 15px;
+    margin-bottom: 18px;
+    background: #edf5ff;
+    border: 1px solid #dcecff;
+    border-radius: 9px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.total-data strong {
+    color: #0866c6;
+    font-weight: 800;
+}
+
+/* TABLE */
 .table-responsive {
-    overflow-x: auto;
-}
-
-table {
     width: 100%;
-    border-collapse: collapse;
-    min-width: 1100px;
+    overflow-x: auto;
+    border: 1px solid #e8edf4;
+    border-radius: 12px;
 }
 
-th, td {
-    padding: 13px;
-    border-bottom: 1px solid #eee;
+.detail-card table {
+    width: 100%;
+    min-width: 1250px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.detail-card th {
+    padding: 15px 14px;
+    background: #edf4fc;
+    color: #29496e;
+    font-size: 11px;
+    font-weight: 800;
     text-align: left;
-    font-size: 13px;
+    white-space: nowrap;
+    border-bottom: 1px solid #dce6f2;
+}
+
+.detail-card td {
+    padding: 15px 14px;
+    color: #475569;
+    font-size: 12px;
+    border-bottom: 1px solid #edf0f5;
+    vertical-align: middle;
     white-space: nowrap;
 }
-/* Tampilan daftar Work Order */
-td.wo-list {
-    white-space: normal;
-    min-width: 280px;
-    max-width: 400px;
-    line-height: 1.8;
-    overflow-wrap: anywhere;
+
+.detail-card tbody tr {
+    background: #ffffff;
+    transition: background .2s;
 }
 
-th {
-    background: #f2f6fc;
-    color: #34516f;
+.detail-card tbody tr:hover {
+    background: #f5f9ff;
 }
 
-.total-data {
-    margin-bottom: 15px;
-    color: #555;
-    font-size: 14px;
+.detail-card tbody tr:last-child td {
+    border-bottom: none;
 }
 
-.status-badge {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 11px;
+/* NOMOR TRANSAKSI */
+.so-number,
+.do-number {
+    color: #0866c6;
     font-weight: 700;
 }
 
+/* WORK ORDER CHIPS */
+.wo-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 340px;
+    white-space: normal;
+}
+
+.wo-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 9px;
+    background: #f0f6ff;
+    border: 1px solid #dceaff;
+    color: #285b91;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* STATUS BADGE */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
 .status-siap {
-    background: #ede9fe;
-    color: #7066e0;
+    background: #edf0ff;
+    color: #6255c7;
 }
 
 .status-proses {
-    background: #d1fae5;
-    color: #059669;
+    background: #fff3dc;
+    color: #c17a12;
 }
 
 .status-diterima {
-    background: #ffe4e6;
-    color: #e45b69;
+    background: #e5f7ee;
+    color: #18865b;
 }
 
+/* PAGINATION */
 .pagination-area {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 15px;
+    margin-top: 22px;
 }
 
 .pagination-area a {
-    padding: 9px 14px;
-    background: #0965c5;
+    padding: 9px 15px;
+    background: #0866c6;
     color: white;
-    border-radius: 7px;
+    border-radius: 8px;
     text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.pagination-area a:hover {
+    background: #0754a5;
 }
 
 .pagination-area span {
     padding: 9px 14px;
-    background: #eef3fb;
-    border-radius: 7px;
+    background: #edf4fc;
+    color: #29496e;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .detail-container {
+        padding: 15px;
+    }
+
+    .detail-card {
+        padding: 18px;
+    }
+
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-form input,
+    .filter-form select,
+    .filter-form button {
+        width: 100%;
+    }
+
+    .pagination-area {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+/* TOMBOL LIHAT WORK ORDER */
+.wo-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 13px;
+    border: 1px solid #d7e7fb;
+    border-radius: 9px;
+    background: #f0f6ff;
+    color: #0866c6;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.wo-trigger:hover {
+    background: #0866c6;
+    color: #fff;
+    border-color: #0866c6;
+    transform: translateY(-1px);
+}
+
+.wo-trigger .wo-count {
+    background: #dceaff;
+    color: #0866c6;
+    padding: 3px 7px;
+    border-radius: 5px;
+}
+
+/* POPUP */
+.wo-dialog {
+    width: min(500px, calc(100% - 30px));
+    border: none;
+    border-radius: 18px;
+    padding: 0;
+    box-shadow: 0 20px 60px rgba(15, 35, 65, .2);
+}
+
+.wo-dialog::backdrop {
+    background: rgba(15, 35, 65, .48);
+    backdrop-filter: blur(3px);
+}
+
+.wo-modal-header {
+    padding: 22px 25px;
+    background: #f0f6ff;
+    border-bottom: 1px solid #e1ebf7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wo-modal-header h3 {
+    color: #17365d;
+    font-size: 17px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.wo-modal-header p {
+    color: #8492a6;
+    font-size: 11px;
+    margin: 5px 0 0;
+}
+
+.wo-modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: white;
+    color: #64748b;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.wo-modal-body {
+    padding: 22px 25px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.wo-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wo-modal-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px;
+    background: #f8faff;
+    border: 1px solid #e8eef7;
+    border-radius: 10px;
+}
+
+.wo-modal-number {
+    width: 29px;
+    height: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #e4efff;
+    color: #0866c6;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.wo-modal-code {
+    color: #29496e;
+    font-size: 12px;
+    font-weight: 700;
+    word-break: break-word;
 }
 </style>
 
@@ -400,8 +668,27 @@ th {
 
                                 <td><?= htmlspecialchars($row['no_so'] ?? '-') ?></td>
 
-                                <td class="wo-list">
-    <?= htmlspecialchars($row['no_wo'] ?? '-') ?>
+<td>
+    <?php
+    $daftarWO = array_values(array_filter(
+        array_map('trim', explode(',', $row['no_wo'] ?? ''))
+    ));
+    ?>
+
+    <?php if (!empty($daftarWO)): ?>
+        <button
+            type="button"
+            class="wo-trigger"
+            data-wo="<?= htmlspecialchars(json_encode($daftarWO), ENT_QUOTES, 'UTF-8') ?>"
+            onclick="bukaDetailWO(this)"
+        >
+            Lihat Work Order
+            <span class="wo-count"><?= count($daftarWO) ?></span>
+            <i class="bi bi-arrow-up-right"></i>
+        </button>
+    <?php else: ?>
+        <span>-</span>
+    <?php endif; ?>
 </td>
                                 <td><?= htmlspecialchars($row['no_do'] ?? '-') ?></td>
 
@@ -445,7 +732,24 @@ th {
                 </tbody>
             </table>
         </div>
+<dialog id="woDialog" class="wo-dialog">
+    <div class="wo-modal-header">
+        <div>
+            <h3>Daftar Work Order</h3>
+            <p id="woModalSubtitle">Rincian Work Order</p>
+        </div>
 
+        <button
+            type="button"
+            class="wo-modal-close"
+            onclick="tutupDetailWO()"
+        >&times;</button>
+    </div>
+
+    <div class="wo-modal-body">
+        <div id="woModalList" class="wo-modal-list"></div>
+    </div>
+</dialog>
         <!-- PAGINATION -->
         <div class="pagination-area">
 
@@ -489,5 +793,46 @@ th {
 
     </div>
 </div>
+<script>
+function bukaDetailWO(button) {
+    const daftarWO = JSON.parse(button.dataset.wo);
+
+    const dialog = document.getElementById('woDialog');
+    const list = document.getElementById('woModalList');
+    const subtitle = document.getElementById('woModalSubtitle');
+
+    list.innerHTML = '';
+    subtitle.textContent = daftarWO.length + ' Work Order ditemukan';
+
+    daftarWO.forEach((wo, index) => {
+        const item = document.createElement('div');
+        item.className = 'wo-modal-item';
+
+        const number = document.createElement('div');
+        number.className = 'wo-modal-number';
+        number.textContent = index + 1;
+
+        const code = document.createElement('div');
+        code.className = 'wo-modal-code';
+        code.textContent = wo;
+
+        item.appendChild(number);
+        item.appendChild(code);
+        list.appendChild(item);
+    });
+
+    dialog.showModal();
+}
+
+function tutupDetailWO() {
+    document.getElementById('woDialog').close();
+}
+
+document.getElementById('woDialog').addEventListener('click', function(event) {
+    if (event.target === this) {
+        this.close();
+    }
+});
+</script>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

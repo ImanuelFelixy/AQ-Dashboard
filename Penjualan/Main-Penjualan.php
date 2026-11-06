@@ -61,33 +61,29 @@ $workOrderNominal = 0;
 
 $stmtLogistik = $conn->prepare("
     SELECT
-        COUNT(DISTINCT d.no_do) AS total_do,
-
         COUNT(DISTINCT CASE
-            WHEN d.tgl_kirim IS NULL
-                OR CAST(d.tgl_kirim AS CHAR) LIKE '0000-00-00%'
+            WHEN (d.tgl_kirim IS NULL
+                OR DATE(d.tgl_kirim) = '0000-00-00')
             THEN d.no_do
         END) AS siap_dikirim,
 
         COUNT(DISTINCT CASE
             WHEN d.tgl_kirim IS NOT NULL
-                AND CAST(d.tgl_kirim AS CHAR) NOT LIKE '0000-00-00%'
-                AND (
-                    d.tgl_terima IS NULL
-                    OR CAST(d.tgl_terima AS CHAR) LIKE '0000-00-00%'
-                )
+                AND DATE(d.tgl_kirim) <> '0000-00-00'
+                AND (d.tgl_terima IS NULL
+                    OR DATE(d.tgl_terima) = '0000-00-00')
             THEN d.no_do
         END) AS proses_pengiriman,
 
         COUNT(DISTINCT CASE
             WHEN d.tgl_terima IS NOT NULL
-                AND CAST(d.tgl_terima AS CHAR) NOT LIKE '0000-00-00%'
+                AND DATE(d.tgl_terima) <> '0000-00-00'
             THEN d.no_do
         END) AS barang_diterima
 
     FROM report_status_do d
     INNER JOIN report_so s
-        ON TRIM(d.no_so) = TRIM(s.no_trans)
+        ON d.no_so = s.no_trans
 
     WHERE s.inquiry_date BETWEEN :start_date AND :end_date
 ");
@@ -127,7 +123,6 @@ foreach ($logisticData as &$item) {
         ? round(($item['value'] / $logisticTotal) * 100, 2)
         : 0;
 }
-
 unset($item);
 
 // ==========================================
@@ -933,27 +928,26 @@ foreach ($invoiceRows as $row) {
         </div>
 
         <!-- Right: Monitoring Logistik -->
-<div class="sales-sub-card">
+        <div class="sales-sub-card">
+            <div class="sales-sub-header">
+                <h3 class="sales-sub-title">Monitoring Logistik</h3>
+            </div>
 
-    <div class="sales-sub-header">
-        <h3 class="sales-sub-title">Monitoring Logistik</h3>
-    </div>
-
-    <div class="sales-pie-layout">
-        <div class="sales-pie-wrapper">
-            <canvas id="logisticsPieChart"></canvas>
-        </div>
-
-        <div class="sales-pie-legend">
-            <?php foreach ($logisticData as $item): ?>
-                <div class="sales-legend-item">
-                    <span class="sales-legend-dot" style="background: <?= $item['color'] ?>;"></span>
-                    <span><?= htmlspecialchars($item['label']) ?></span>
+            <div class="sales-pie-layout">
+                <div class="sales-pie-wrapper">
+                    <canvas id="logisticsPieChart"></canvas>
                 </div>
-            <?php endforeach; ?>
+
+                <div class="sales-pie-legend">
+                    <?php foreach ($logisticData as $item): ?>
+                        <div class="sales-legend-item">
+                            <span class="sales-legend-dot" style="background: <?= $item['color'] ?>;"></span>
+                            <span><?= htmlspecialchars($item['label']) ?></span>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
     </section>
 
@@ -1075,25 +1069,30 @@ new Chart(ctxLogistics, {
         }]
     },
     options: {
-    responsive: true,
-    maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
 
-    onClick: function(event, elements) {
-        if (elements.length > 0) {
-            const index = elements[0].index;
-            const selectedStatus = logisticData[index].label;
+        onClick: function(event, elements) {
+            if (elements.length > 0) {
+                const index = elements[0].index;
+                const selectedStatus = logisticData[index].label;
 
-            const params = new URLSearchParams({
-                tanggal_awal: '<?= htmlspecialchars($startDate) ?>',
-                tanggal_akhir: '<?= htmlspecialchars($endDate) ?>',
-                status: selectedStatus
-            });
+                const params = new URLSearchParams({
+                    tanggal_awal: '<?= htmlspecialchars($startDate) ?>',
+                    tanggal_akhir: '<?= htmlspecialchars($endDate) ?>',
+                    status: selectedStatus
+                });
 
-            window.location.href = 'Detail-Logistik.php?' + params.toString();
-        }
-    },
+                window.location.href = 'Detail-Logistik.php?' + params.toString();
+            }
+        },
 
-    plugins: {
+        onHover: function(event, elements) {
+            event.native.target.style.cursor =
+                elements.length > 0 ? 'pointer' : 'default';
+        },
+
+        plugins: {
             legend: {
                 display: false
             },
