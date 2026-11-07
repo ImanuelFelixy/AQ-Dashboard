@@ -438,6 +438,24 @@
     line-height: 1.5;
 }
 
+.production-ratio-card .production-ratio-detail {
+    cursor: pointer;
+    background: #fff7f0;
+    border: 1px solid #ffeadc;
+    transition: background-color 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.production-ratio-card .production-ratio-detail:hover {
+    background: #ffdfc7 !important;
+    border-color: #fb923c !important;
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.18);
+}
+
+.production-ratio-card .production-ratio-detail:active {
+    background: #fed0ae !important;
+}
 
 /* ==================================================
    DETAIL RASIO

@@ -349,7 +349,12 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 
             </div>
 
-            <div class="production-ratio-detail">
+            <div class="production-ratio-detail"
+                onclick="openRatioModal()"
+                onmouseenter="this.style.backgroundColor='#ffdfc7'; this.style.borderColor='#fb923c';"
+                onmouseleave="this.style.backgroundColor='#fff7f1'; this.style.borderColor='#ffeadc';"
+                style="cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease;"
+                title="Klik untuk melihat detail rasio penggunaan bahan">
 
                 <div>
                     <span>Jml Bahan:</span>
@@ -461,6 +466,7 @@ if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
 <?php
 require_once __DIR__ . '/POPCARD1.php';
 require_once __DIR__ . '/POPCARD2.php';
+require_once __DIR__ . '/POPCARD3.php';
 require_once __DIR__ . '/PopCard4.php';
 require_once __DIR__ . '/PopCard5.php';
 ?>
@@ -532,7 +538,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     data: values,
                     backgroundColor: colors,
                     borderWidth: 0,
-                    hoverOffset: 7
+                    hoverOffset: 8,
+                    spacing: 2
                 }]
             },
 
