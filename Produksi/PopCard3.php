@@ -1206,20 +1206,3 @@ function toggleMaterialDetail(idBarang) {
     font-weight: 700;
 }
 </style>
-
-/* AREA KOTAK ORANYE PEMBUKA POPUP */
-.production-ratio-detail {
-    cursor: pointer;
-    position: relative;
-    z-index: 2;
-    pointer-events: auto;
-    transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
-}
-.production-ratio-detail:hover {
-    background-color: #ffdfc7 !important;
-    border-color: #fb923c !important;
-}
-.production-ratio-detail:focus-visible {
-    outline: 3px solid rgba(251, 146, 60, .45);
-    outline-offset: 3px;
-}
