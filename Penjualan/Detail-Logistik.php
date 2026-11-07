@@ -563,6 +563,223 @@ require_once __DIR__ . '/../includes/header.php';
     font-weight: 700;
     word-break: break-word;
 }
+/* =========================================
+   AQUAMATE - PREMIUM DETAIL LOGISTIK
+   VISUAL MATCH DETAIL SALES ORDER
+========================================= */
+
+/* PAGE BACKGROUND */
+.detail-container {
+    padding: 34px;
+    background:
+        radial-gradient(ellipse at 90% 0%, rgba(46, 130, 220, .10), transparent 35%),
+        #f1f5fb;
+    min-height: calc(100vh - 100px);
+}
+
+/* MAIN CARD */
+.detail-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e4ebf5;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 18px 50px rgba(25, 55, 95, .08);
+}
+
+.detail-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #0753a5, #1689f5, #75bdff);
+}
+
+/* HEADER */
+.detail-header {
+    position: relative;
+    padding-bottom: 25px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #edf1f7;
+}
+
+.detail-header h2 {
+    font-size: 30px;
+    font-weight: 850;
+    color: #142f50;
+    letter-spacing: -1px;
+}
+
+.detail-header p {
+    font-size: 13px;
+    color: #8493a8;
+}
+
+.detail-header a {
+    border-radius: 10px;
+    transition: all .25s ease;
+}
+
+.detail-header a:hover {
+    transform: translateX(-4px);
+}
+
+/* FILTER */
+.filter-form {
+    display: flex;
+    gap: 12px;
+    padding: 20px;
+    background: linear-gradient(120deg, #f5f9ff, #edf5ff);
+    border: 1px solid #e0ebf9;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(35, 80, 130, .035);
+}
+
+.filter-form input,
+.filter-form select {
+    height: 47px;
+    border: 1px solid #dce6f2;
+    border-radius: 10px;
+    font-size: 12px;
+    transition: all .2s ease;
+}
+
+.filter-form input:focus,
+.filter-form select:focus {
+    border-color: #1683e5;
+    box-shadow: 0 0 0 4px rgba(22, 131, 229, .10);
+}
+
+/* TOTAL DATA */
+.total-data {
+    position: relative;
+    min-width: 250px;
+    padding: 18px 20px 18px 55px;
+    margin: 0 0 23px;
+    background: linear-gradient(120deg, #eaf4ff, #f5f9ff);
+    border: 1px solid #d8e8fb;
+    border-radius: 13px;
+    box-shadow: 0 6px 18px rgba(25, 90, 160, .06);
+}
+
+.total-data::before {
+    content: "▤";
+    position: absolute;
+    left: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 27px;
+    height: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #d5e9ff;
+    color: #0866c6;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.total-data strong {
+    font-size: 13px;
+}
+
+/* TABLE */
+.table-responsive {
+    border: 1px solid #e2eaf4;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(20, 50, 90, .045);
+}
+
+.detail-card th {
+    padding: 19px 16px;
+    background: #eaf2fc;
+    color: #23476f;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .25px;
+    border-bottom: 1px solid #dce7f5;
+}
+
+.detail-card td {
+    padding: 19px 16px;
+    color: #52647a;
+    font-size: 12px;
+    transition: background .2s ease;
+}
+
+/* ALTERNATING ROW COLORS */
+.detail-card tbody tr:nth-child(odd) {
+    background: #ffffff;
+}
+
+.detail-card tbody tr:nth-child(even) {
+    background: #f8faff;
+}
+
+.detail-card tbody tr:hover {
+    background: #eaf4ff;
+}
+
+.detail-card tbody tr:hover td {
+    color: #1c426c;
+}
+
+/* WO BUTTON */
+.wo-trigger {
+    transition: all .25s ease;
+}
+
+.wo-trigger:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(8, 102, 198, .18);
+}
+
+/* STATUS BADGE */
+.status-badge {
+    font-weight: 800;
+}
+
+/* PAGINATION */
+.pagination-container,
+.pagination-area {
+    padding-top: 22px;
+    margin-top: 25px;
+    border-top: 1px solid #edf1f7;
+}
+
+.pagination-buttons a,
+.pagination-area a {
+    box-shadow: 0 3px 9px rgba(8, 102, 198, .12);
+}
+
+.pagination-current,
+.pagination-area div > span {
+    border: 1px solid #d9e8fa;
+    background: #eaf3ff;
+    color: #075caf;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .detail-container {
+        padding: 14px;
+    }
+
+    .detail-card {
+        padding: 18px;
+    }
+
+    .detail-header h2 {
+        font-size: 24px;
+    }
+
+    .total-data {
+        width: 100%;
+    }
+}
 </style>
 
 <div class="detail-container">

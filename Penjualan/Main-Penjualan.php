@@ -161,41 +161,44 @@ foreach ($invoiceRows as $row) {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-/* ==========================================
-   GENERAL DASHBOARD STYLES
-========================================== */
+/* =========================================
+   AQUAMATE — PREMIUM SALES DASHBOARD
+========================================= */
 
 .sales-dashboard {
+    position: relative;
+    isolation: isolate;
     width: 100%;
-    padding: 24px 28px;
-    background: #f5f7fc;
     min-height: calc(100vh - 100px);
+    padding: 30px 32px;
+    background:
+        radial-gradient(ellipse at 5% 0%, rgba(59,130,246,.13), transparent 32%),
+        radial-gradient(ellipse at 95% 15%, rgba(14,165,233,.10), transparent 30%),
+        linear-gradient(135deg, #edf4ff 0%, #f5f8ff 48%, #eaf2fc 100%);
 }
 
 .sales-dashboard * {
     box-sizing: border-box;
 }
 
-/* ==========================================
-   TOP BAR (GREETING & ACTIONS)
-========================================== */
+/* TOPBAR */
 
 .sales-topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 22px;
 }
 
 .sales-user-tag {
     color: #64748b;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .sales-user-tag span {
-    color: #0866c6;
+    color: #075db5;
     font-weight: 800;
 }
 
@@ -203,105 +206,138 @@ foreach ($invoiceRows as $row) {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .sales-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: 1px solid #dce5f1;
-    background: #fff;
-    color: #46566d;
-    font-size: 11px;
+    gap: 8px;
+    padding: 11px 17px;
+    border: 1px solid #dce7f5;
+    border-radius: 11px;
+    background: rgba(255,255,255,.9);
+    color: #475569;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
-    transition: all .2s ease;
     text-decoration: none;
+    box-shadow: 0 3px 10px rgba(30,64,110,.04);
+    transition: all .25s ease;
 }
 
 .sales-btn:hover {
-    background: #edf4ff;
-    color: #0866c6;
-    border-color: #c7dbfb;
+    transform: translateY(-2px);
+    background: #eff6ff;
+    color: #075db5;
+    border-color: #b9d6fb;
+    box-shadow: 0 6px 16px rgba(37,99,235,.10);
 }
 
 .sales-btn.primary {
-    background: #0866c6;
+    background: linear-gradient(135deg, #0878d5, #0754ad);
     color: #fff;
-    border-color: #0866c6;
+    border-color: transparent;
+    box-shadow: 0 5px 14px rgba(8,102,198,.22);
 }
 
 .sales-btn.primary:hover {
-    background: #0754a5;
-    border-color: #0754a5;
+    background: linear-gradient(135deg, #0868bd, #064895);
     color: #fff;
 }
 
-/* ==========================================
-   BANNER & FILTER PERIODE
-========================================== */
+/* =========================================
+   BANNER & FILTER
+========================================= */
 
 .sales-banner-card {
-    background: #fff;
-    border: 1px solid #dce9fb;
-    border-radius: 14px;
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 14px rgba(32, 66, 110, .04);
-    margin-bottom: 20px;
+    background: #fff;
+    border: 1px solid #dce8f7;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(30,64,110,.07);
 }
 
 .sales-banner-header {
-    background: linear-gradient(135deg, #075db5 0%, #0866c6 100%);
-    color: #ffffff;
-    padding: 20px 26px;
+    position: relative;
+    overflow: hidden;
+    padding: 30px 32px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 90% 20%, rgba(255,255,255,.18), transparent 25%),
+        linear-gradient(115deg, #073b78 0%, #075db5 52%, #1688e5 100%);
+}
+
+.sales-banner-header::after {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    right: -70px;
+    bottom: -190px;
+    border: 35px solid rgba(255,255,255,.09);
+    border-radius: 50%;
 }
 
 .sales-banner-title {
-    font-size: 20px;
-    font-weight: 800;
-    margin: 0 0 6px 0;
-    letter-spacing: -0.3px;
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin: 0 0 9px;
+    color: #ffffff !important;
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -.6px;
 }
 
 .sales-banner-title i {
-    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 12px;
+    background: rgba(255,255,255,.14);
+    font-size: 20px;
 }
 
 .sales-banner-desc {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
     margin: 0;
-    line-height: 1.5;
+    color: rgba(255,255,255,.88) !important;
+    font-size: 13px;
+    line-height: 1.7;
 }
 
 .sales-filter-body {
-    background: #eaf2ff;
-    padding: 16px 24px;
-    border-top: 1px solid #dce9fb;
+    padding: 22px 28px 25px;
+    background: linear-gradient(135deg, #f5f9ff, #eaf3ff);
+    border-top: 1px solid #dce8f7;
 }
 
 .sales-filter-title {
-    font-size: 11.5px;
-    font-weight: 800;
-    color: #53647c;
-    margin-bottom: 12px;
-    text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 8px;
-    letter-spacing: 0.5px;
+    gap: 9px;
+    margin-bottom: 15px;
+    color: #334e70;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .7px;
+    text-transform: uppercase;
 }
 
 .sales-filter-title i {
-    color: #0866c6;
-    font-size: 14px;
+    color: #0878d5;
+    font-size: 16px;
 }
 
 .sales-filter-form {
@@ -312,348 +348,392 @@ foreach ($invoiceRows as $row) {
 }
 
 .sales-filter-form input[type="date"] {
-    height: 48px;
+    height: 49px;
     flex: 1;
     min-width: 0;
-    padding: 0 16px;
+    padding: 0 15px;
+    border: 1px solid #d8e4f3;
+    border-radius: 11px;
     background: #fff;
-    border: 1px solid #dce4f0;
-    border-radius: 9px;
-    color: #42536b;
+    color: #334155;
     font-size: 13px;
     font-weight: 600;
-    transition: border-color .2s;
+    transition: all .2s ease;
 }
 
 .sales-filter-form input[type="date"]:focus {
     outline: none;
-    border-color: #0866c6;
-    box-shadow: 0 0 0 3px rgba(8, 102, 198, .12);
+    border-color: #1684df;
+    box-shadow: 0 0 0 4px rgba(22,132,223,.10);
 }
 
 .sales-filter-form .separator {
+    color: #7b8da5;
     font-size: 13px;
-    color: #738198;
-    font-weight: 600;
-    white-space: nowrap;
+    font-weight: 700;
 }
 
 .sales-filter-submit {
-    height: 48px;
-    padding: 0 26px;
+    height: 49px;
+    padding: 0 27px;
     border: none;
-    border-radius: 9px;
-    background: #0866c6;
-    color: white;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #087bd8, #0756b0);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 13px rgba(8,102,198,.20);
+    transition: all .25s ease;
+}
+
+.sales-filter-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(8,102,198,.25);
+}
+
+.sales-today {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    height: 49px;
+    padding: 0 17px;
+    margin: 0;
+    border: 1px solid #d8e4f3;
+    border-radius: 11px;
+    background: #fff;
+    color: #52657f;
     font-size: 12px;
     font-weight: 700;
     white-space: nowrap;
     cursor: pointer;
-    transition: background-color .2s;
-}
-
-.sales-filter-submit:hover {
-    background: #0754a5;
-}
-
-.sales-today {
-    height: 48px;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 0 18px;
-    background: white;
-    border: 1px solid #dce4f0;
-    border-radius: 9px;
-    color: #53647c;
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-    margin: 0;
-    transition: background-color .2s;
+    transition: all .2s ease;
 }
 
 .sales-today:hover {
-    background: #f8fafc;
+    border-color: #a9cdf7;
+    background: #f0f7ff;
 }
 
-.sales-today input[type="checkbox"] {
-    accent-color: #0866c6;
-    cursor: pointer;
+.sales-today input {
     width: 15px;
     height: 15px;
+    accent-color: #0878d5;
 }
 
-/* ==========================================
-   MIDDLE SECTION: FULL-WIDTH INVOICE CHART
-========================================== */
+/* =========================================
+   INVOICE CHART
+========================================= */
 
 .sales-invoice-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 20px 24px;
-    box-shadow: 0 2px 10px rgba(32, 66, 110, .03);
-    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    padding: 25px 28px 24px;
+    margin-bottom: 24px;
+    border: 1px solid #e0eaf6;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #ffffff 0%, #fbfdff 100%);
+    box-shadow: 0 9px 28px rgba(30,64,110,.065);
+    transition: all .25s ease;
+}
+
+.sales-invoice-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #0754ad, #1688e5, #69c5ff);
 }
 
 .sales-invoice-header {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 16px;
     position: relative;
+    margin-bottom: 22px;
 }
 
 .sales-invoice-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: #1e293b;
-    margin: 0;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 11px;
+    margin: 0;
+    color: #17365d;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -.3px;
 }
 
 .invoice-legend-symbol {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    color: #5b52e0;
+    color: #0878d5;
 }
 
 .invoice-legend-symbol .line {
-    width: 18px;
-    height: 2px;
-    background: #5b52e0;
-    display: inline-block;
+    width: 20px;
+    height: 3px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #0754ad, #36a3f5);
 }
 
 .invoice-legend-symbol .dot {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
+    margin-left: -14px;
+    border: 2px solid #1688e5;
     border-radius: 50%;
     background: #fff;
-    border: 2px solid #5b52e0;
-    display: inline-block;
-    margin-left: -13px;
 }
 
 .sales-line-container {
     position: relative;
-    height: 260px;
     width: 100%;
+    height: 290px;
 }
 
-/* ==========================================
-   BOTTOM SECTION: OPERASIONAL & LOGISTIK
-========================================== */
+/* =========================================
+   BOTTOM CARDS
+========================================= */
 
 .sales-bottom-grid {
     display: grid;
     grid-template-columns: 1.45fr 1fr;
-    gap: 18px;
-    margin-bottom: 20px;
+    gap: 22px;
+    margin-bottom: 24px;
 }
 
 .sales-sub-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 22px 24px;
-    box-shadow: 0 2px 10px rgba(32, 66, 110, .03);
     display: flex;
     flex-direction: column;
+    padding: 25px;
+    border: 1px solid #e0eaf6;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 9px 28px rgba(30,64,110,.06);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.sales-sub-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 13px 32px rgba(30,64,110,.10);
 }
 
 .sales-sub-header {
+    margin-bottom: 23px;
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .sales-sub-title {
+    margin: 0;
+    color: #17365d;
     font-size: 18px;
     font-weight: 800;
-    color: #1e293b;
-    margin: 0;
 }
 
-/* Operasional: 2 Sub Metric Cards */
+/* OPERATIONAL METRICS */
+
 .sales-operasional-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 17px;
     flex: 1;
 }
 
 .s-metric-box {
-    background: #fff;
-    border: 2px solid #0875d1;
-    border-radius: 14px;
-    padding: 20px;
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 155px;
-    box-shadow: 0 2px 8px rgba(8, 117, 209, .05);
-    transition: transform .2s ease, box-shadow .2s ease;
+    min-height: 165px;
+    padding: 21px;
+    border: 1px solid #d7e8fb;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #f5faff, #eaf4ff);
+    box-shadow: 0 4px 13px rgba(8,102,198,.045);
+    transition: all .25s ease;
+}
+
+.s-metric-box::after {
+    content: "";
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    right: -38px;
+    bottom: -52px;
+    border: 17px solid rgba(8,120,213,.07);
+    border-radius: 50%;
 }
 
 .s-metric-box:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(8, 117, 209, .1);
+    transform: translateY(-4px);
+    border-color: #9bc9f7;
+    box-shadow: 0 10px 22px rgba(8,102,198,.12);
 }
 
 .s-box-top {
+    position: relative;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .s-box-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: #1e293b;
     margin: 0;
+    color: #29496e;
+    font-size: 15px;
+    font-weight: 800;
 }
 
 .s-circle-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #dbeafe;
-    color: #0875d1;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #c8e1fc;
+    border-radius: 11px;
+    background: #fff;
+    color: #0878d5;
     font-size: 14px;
     text-decoration: none;
-    border: none;
     cursor: pointer;
-    transition: transform .2s ease;
+    transition: all .2s ease;
 }
 
 .s-circle-btn:hover {
-    transform: scale(1.08);
+    transform: rotate(45deg);
+    background: #0878d5;
+    color: #fff;
 }
 
 .s-box-metric {
-    margin: 14px 0 8px;
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: baseline;
-    gap: 8px;
+    gap: 9px;
+    margin: 18px 0 12px;
 }
 
 .s-metric-num {
-    font-size: 34px;
+    color: #0754ad;
+    font-size: 37px;
     font-weight: 800;
-    color: #0f172a;
     line-height: 1;
 }
 
 .s-metric-unit {
+    color: #71839b;
     font-size: 13px;
     font-weight: 700;
-    color: #64748b;
 }
 
 .s-box-footer {
+    position: relative;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 11.5px;
-    color: #64748b;
-    font-weight: 600;
+    gap: 8px;
     margin-top: auto;
+    color: #71839b;
+    font-size: 11px;
+    font-weight: 600;
 }
 
 .s-box-footer strong {
-    color: #1e293b;
-    font-weight: 700;
+    color: #29496e;
+    font-weight: 800;
 }
 
-/* Logistik: Pie Chart & Legend */
+/* LOGISTICS CHART */
+
 .sales-pie-layout {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1;
-    min-height: 200px;
+    min-height: 220px;
 }
 
 .sales-pie-wrapper {
-    width: 170px;
-    height: 170px;
     position: relative;
-    margin: 6px 0 16px;
+    width: 180px;
+    height: 180px;
+    margin: 5px 0 20px;
 }
 
 .sales-pie-legend {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 16px;
     flex-wrap: wrap;
+    gap: 15px;
     margin-top: auto;
 }
 
 .sales-legend-item {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
+    color: #64748b;
     font-size: 11px;
     font-weight: 700;
-    color: #64748b;
 }
 
 .sales-legend-dot {
     width: 9px;
     height: 9px;
-    border-radius: 50%;
-    display: inline-block;
     flex-shrink: 0;
+    border-radius: 50%;
 }
 
-/* ==========================================
-   SYSTEM STATUS FOOTER
-========================================== */
+/* =========================================
+   FOOTER
+========================================= */
 
 .sales-footer {
-    background: #1d2b3e;
-    color: #aab6c6;
-    padding: 12px 22px;
-    border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
     flex-wrap: wrap;
-    font-size: 10px;
-    margin-top: 10px;
+    gap: 12px;
+    padding: 15px 22px;
+    margin-top: 15px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 13px;
+    background: linear-gradient(110deg, #102b4b, #173e68);
+    color: #c1d0e3;
+    font-size: 11px;
 }
 
 .sales-footer .online {
-    color: #34d399;
-    font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
+    color: #6ee7b7;
+    font-weight: 800;
 }
 
 .sales-footer .online-dot {
-    width: 7px;
-    height: 7px;
-    background: #34d399;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 6px #34d399;
+    background: #34d399;
+    box-shadow: 0 0 9px rgba(52,211,153,.7);
 }
 
-/* ==========================================
-   RESPONSIVE DESIGN
-========================================== */
+/* =========================================
+   RESPONSIVE
+========================================= */
 
 @media (max-width: 1100px) {
     .sales-bottom-grid {
@@ -663,7 +743,7 @@ foreach ($invoiceRows as $row) {
 
 @media (max-width: 768px) {
     .sales-dashboard {
-        padding: 16px 14px;
+        padding: 17px 14px;
     }
 
     .sales-topbar {
@@ -680,15 +760,15 @@ foreach ($invoiceRows as $row) {
     }
 
     .sales-banner-header {
-        padding: 16px 18px;
+        padding: 23px 20px;
     }
 
     .sales-banner-title {
-        font-size: 17px;
+        font-size: 19px;
     }
 
     .sales-filter-body {
-        padding: 14px 16px;
+        padding: 18px;
     }
 
     .sales-filter-form {
@@ -696,7 +776,7 @@ foreach ($invoiceRows as $row) {
     }
 
     .sales-filter-form input[type="date"] {
-        flex: 1 1 45%;
+        flex: 1 1 40%;
         min-width: 120px;
     }
 
@@ -704,47 +784,45 @@ foreach ($invoiceRows as $row) {
         display: none;
     }
 
-    .sales-filter-submit {
+    .sales-filter-submit,
+    .sales-today {
         flex: 1 1 100%;
     }
 
-    .sales-today {
-        width: 100%;
-        justify-content: center;
+    .sales-invoice-card,
+    .sales-sub-card {
+        padding: 19px;
+    }
+
+    .sales-line-container {
+        height: 220px;
     }
 
     .sales-operasional-container {
         grid-template-columns: 1fr;
     }
 
-    .sales-line-container {
-        height: 200px;
-    }
-
     .sales-pie-wrapper {
-        width: 150px;
-        height: 150px;
+        width: 155px;
+        height: 155px;
     }
 
     .sales-footer {
         flex-direction: column;
         align-items: flex-start;
-        gap: 6px;
     }
 }
 
-/* ==========================================
-   PRINT STYLES
-========================================== */
+/* PRINT */
 
 @media print {
     body {
-        background: white !important;
+        background: #fff !important;
     }
 
     .sales-dashboard {
         padding: 10px;
-        background: white;
+        background: #fff;
     }
 
     .sales-actions,
@@ -947,9 +1025,200 @@ foreach ($invoiceRows as $row) {
                     <?php endforeach; ?>
                 </div>
             </div>
+               </div>
+    </section>
+
+        <style>
+/* ACTIVITY MONITORING */
+
+.activity-toggle-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    grid-column: 1 / -1;
+    margin: 22px 0 16px;
+}
+
+.activity-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px;
+    border: 1px solid #dbe8f8;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #145da8;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(20, 70, 130, .07);
+    transition: .2s ease;
+}
+
+.activity-toggle-btn:hover,
+.activity-toggle-btn.active {
+    background: #0866c6;
+    color: #ffffff;
+    border-color: #0866c6;
+}
+
+.activity-chevron {
+    transition: transform .2s ease;
+}
+
+.activity-toggle-btn.active .activity-chevron {
+    transform: rotate(180deg);
+}
+
+/* PANEL HARUS DI BAWAH TOMBOL */
+
+.activity-history-panel {
+    display: block;
+    width: 100%;
+    grid-column: 1 / -1;
+    padding: 25px;
+    margin-bottom: 25px;
+    background: #ffffff;
+    border: 1px solid #e2ebf7;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(30, 64, 110, .06);
+    box-sizing: border-box;
+}
+
+.activity-history-panel[hidden] {
+    display: none !important;
+}
+
+.activity-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.activity-history-header h3 {
+    margin: 0 0 6px;
+    color: #173b68;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.activity-history-header p {
+    margin: 0;
+    color: #8796aa;
+    font-size: 13px;
+}
+
+.activity-view-all {
+    padding: 10px 15px;
+    background: #edf5ff;
+    color: #0866c6;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.activity-history-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.activity-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.activity-history-table th {
+    padding: 14px;
+    background: #edf4fd;
+    color: #31577f;
+    text-align: left;
+}
+
+.activity-history-table td {
+    padding: 14px;
+    border-bottom: 1px solid #edf1f7;
+    color: #64748b;
+}
+
+.activity-empty {
+    text-align: center;
+    padding: 30px !important;
+}
+</style>
+<!-- TOMBOL RIWAYAT AKTIVITAS -->
+<?php
+$stmtActivity = $conn->query("
+    SELECT nama_user, aktivitas, modul, keterangan, created_at
+    FROM user_activity_log
+    ORDER BY created_at DESC
+    LIMIT 5
+");
+$recentActivities = $stmtActivity->fetchAll();
+?>
+
+<div class="activity-toggle-container">
+    <button type="button"
+            class="activity-toggle-btn"
+            id="activityToggleBtn"
+            onclick="toggleActivityHistory()">
+
+        <i class="bi bi-clock-history"></i>
+        Riwayat Aktivitas
+        <i class="bi bi-chevron-down activity-chevron"></i>
+    </button>
+</div>
+
+<div id="activityHistoryPanel" class="activity-history-panel" hidden>
+
+    <div class="activity-history-header">
+        <div>
+            <h3>Riwayat Aktivitas</h3>
+            <p>Pantau aktivitas terbaru Dashboard Aquamate.</p>
         </div>
 
-    </section>
+        <a href="../Riwayat-Aktivitas.php" class="activity-view-all">
+            Lihat Semua <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="activity-history-table-wrapper">
+        <table class="activity-history-table">
+            <thead>
+                <tr>
+                    <th>Waktu</th>
+                    <th>Nama User</th>
+                    <th>Aktivitas</th>
+                    <th>Modul</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php if (!empty($recentActivities)): ?>
+                    <?php foreach ($recentActivities as $activity): ?>
+                        <tr>
+                            <td><?= date('d/m/Y H:i', strtotime($activity['created_at'])) ?></td>
+                            <td><?= htmlspecialchars($activity['nama_user']) ?></td>
+                            <td><?= htmlspecialchars($activity['aktivitas']) ?></td>
+                            <td><?= htmlspecialchars($activity['modul']) ?></td>
+                            <td><?= htmlspecialchars($activity['keterangan'] ?? '-') ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="activity-empty">
+                            Belum ada aktivitas.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 </main>
 
@@ -1057,7 +1326,7 @@ const logLabels = logisticData.map(l => l.label);
 const ctxLogistics = document.getElementById('logisticsPieChart').getContext('2d');
 
 new Chart(ctxLogistics, {
-    type: 'pie',
+    type: 'doughnut',
     data: {
         labels: logLabels,
         datasets: [{
@@ -1065,10 +1334,15 @@ new Chart(ctxLogistics, {
             backgroundColor: logColors,
             borderWidth: 1,
             borderColor: '#ffffff',
-            hoverOffset: 6
+            hoverOffset: 8,
+borderWidth: 4,
+borderColor: '#ffffff',
+spacing: 3,
+borderRadius: 5
         }]
     },
     options: {
+        cutout: '72%',
         responsive: true,
         maintainAspectRatio: false,
 
@@ -1136,6 +1410,23 @@ todayCheckbox.addEventListener('change', function() {
 // ======================================
 function exportExcel() {
     alert('Fitur Export Excel akan diaktifkan setelah data penjualan terhubung dengan database.');
+}
+// TOGGLE RIWAYAT AKTIVITAS
+function toggleActivityHistory() {
+    const panel = document.getElementById('activityHistoryPanel');
+    const button = document.getElementById('activityToggleBtn');
+
+    if (!panel || !button) return;
+
+    const isHidden = panel.hidden;
+
+    panel.hidden = !isHidden;
+    button.classList.toggle('active', isHidden);
+
+    button.setAttribute(
+        'aria-expanded',
+        isHidden ? 'true' : 'false'
+    );
 }
 </script>
 

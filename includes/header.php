@@ -29,16 +29,50 @@ $basePath = $basePath ?? (str_contains($_SERVER['PHP_SELF'], '/pages/') ? '../' 
         </button>
         <div class="collapse navbar-collapse" id="mainNavigation">
             <ul class="navbar-nav mx-auto nav-links">
-                <li class="nav-item"><a class="nav-link <?= $activePage === 'home' ? 'active' : '' ?>" href="<?= $basePath ?>index.php"><i class="bi bi-house-door"></i> Home</a></li>
-                <li class="nav-item"><a class="nav-link <?= $activePage === 'penjualan' ? 'active' : '' ?>" href="<?= $basePath ?>Penjualan/Main-Penjualan.php"><i class="bi bi-graph-up-arrow"></i> Dashboard Penjualan</a></li>
-                <li class="nav-item"><a class="nav-link <?= $activePage === 'pembelian' ? 'active' : '' ?>" href="<?= $basePath ?>Pembelian/Main-Pembelian.php"><i class="bi bi-box-seam"></i> Dashboard Pembelian</a></li>
-                <li class="nav-item"><a class="nav-link <?= $activePage === 'produksi' ? 'active' : '' ?>" href="<?= $basePath ?>Produksi/Main-Produksi.php"><i class="bi bi-gear-wide-connected"></i> Dashboard Produksi</a></li>
-            </ul>
+
+    <li class="nav-item">
+        <a class="nav-link <?= $activePage === 'home' ? 'active' : '' ?>"
+           href="<?= $basePath ?>index.php">
+            <i class="bi bi-house-door"></i> Home
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link <?= $activePage === 'penjualan' ? 'active' : '' ?>"
+           href="<?= $basePath ?>Penjualan/Main-Penjualan.php">
+            <i class="bi bi-graph-up-arrow"></i> Dashboard Penjualan
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link <?= $activePage === 'pembelian' ? 'active' : '' ?>"
+           href="<?= $basePath ?>Pembelian/Main-Pembelian.php">
+            <i class="bi bi-box-seam"></i> Dashboard Pembelian
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link <?= $activePage === 'produksi' ? 'active' : '' ?>"
+           href="<?= $basePath ?>Produksi/Main-Produksi.php">
+            <i class="bi bi-gear"></i> Dashboard Produksi
+        </a>
+    </li>
+
+</ul>
             <div class="nav-user">
-                <div class="user-avatar">A</div>
-                <div class="user-copy"><span>Selamat datang</span><strong>Administrator</strong></div>
-                <i class="bi bi-chevron-down user-chevron"></i>
-            </div>
+    <div class="user-avatar">A</div>
+
+    <div class="user-copy">
+        <span>Selamat datang</span>
+        <strong>Administrator</strong>
+    </div>
+
+    <a href="<?= $basePath ?>logout.php"
+       class="btn btn-sm btn-outline-danger ms-3"
+       onclick="return confirm('Apakah Anda yakin ingin logout?')">
+        <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
+</div>
         </div>
     </div>
 </nav>
