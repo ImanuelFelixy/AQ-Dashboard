@@ -43,7 +43,7 @@ require __DIR__ . '/includes/header.php';
             </a>
         </div>
         <div class="col-md-6 col-xl-4">
-            <a cla      ss="module-card purchase-card" href="Pembelian/Main-Pembelian.php">
+            <a class="module-card purchase-card" href="Pembelian/Main-Pembelian.php">
                 <div class="module-icon"><i class="bi bi-box-seam"></i></div>
                 <span class="module-tag">PROCUREMENT</span>
                 <h3>Dashboard Pembelian</h3>
