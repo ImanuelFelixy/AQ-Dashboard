@@ -6,7 +6,7 @@
 */
 
 $host     = 'localhost';
-$dbname   = 'dummy_aq';
+$dbname   = 'db_pembelian';
 $username = 'root';
 $password = '';
 
